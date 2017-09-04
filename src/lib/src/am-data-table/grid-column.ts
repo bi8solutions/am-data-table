@@ -4,8 +4,9 @@ import * as _ from 'lodash';
 
 export interface GridColumnConfig {
 
-  type?: string;
+
   key: string,
+  type?: string;
   heading?: string,
   sortable?: boolean,
   noHeading?: boolean,    // if we should display an heading
@@ -38,10 +39,14 @@ export class GridColumn {
     this.config = {
       key: config.key,
       type: config.type || 'text',
+      heading: config.heading,
       sortable: !_.isNil(config.sortable) ? config.sortable : false,
+      noHeading: config.noHeading,
       headingFormatter: config.headingFormatter || HeadingFormatter,
       formatter: config.formatter,
-      context: config.context || {}
+      context: config.context || {},
+      headingTemplate: config.headingTemplate,
+      dataTemplate: config.dataTemplate
     };
 
     this.styles = {
@@ -53,8 +58,8 @@ export class GridColumn {
       maxWidth: !_.isNil(styles.maxWidth) ? styles.maxWidth : null
     };
 
-    if (!config.heading && !config.noHeading){
-      let tempHeading = config.key;
+    if (!this.config.heading && !this.config.noHeading){
+      let tempHeading = this.config.key;
       this.config.heading = '';
 
       tempHeading.split('.').forEach((name, index)=>{

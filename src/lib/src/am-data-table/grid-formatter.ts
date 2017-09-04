@@ -19,7 +19,11 @@ export class PropertyFormatter implements RowDataFormatter {
   @Input() row: any;
 
   getValue(){
-    return eval(`this.row.${this.column.config.key}`);
+    try {
+      return eval(`this.row.${this.column.config.key}`);
+    } catch (error){
+      return null;
+    }
   }
 }
 

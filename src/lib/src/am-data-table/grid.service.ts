@@ -45,6 +45,7 @@ export class GridService {
       let defaultColumn = this.getDefaultColumn(column.config.type);
       if (defaultColumn){
         _.defaultsDeep(column, defaultColumn);
+        //console.log(column);
       }
     });
   }

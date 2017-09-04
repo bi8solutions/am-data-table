@@ -22,7 +22,8 @@ import {Subscription} from "rxjs/Subscription";
       </div>
     </ng-container>
   `,
-  styleUrls: ['./grid-data-row.component.scss']
+  styleUrls: ['./grid-data-row.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GridDataRowComponent implements OnInit, AfterViewInit, OnDestroy {
 
