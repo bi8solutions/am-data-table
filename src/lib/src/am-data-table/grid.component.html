@@ -1,0 +1,13 @@
+<div class="mat-elevation-z1 grid-container" [ngClass]="{'scroll-wrapper': model.styles.scrollX}">
+  <div class="wrapper-container">
+    <div class="am-grid" [ngStyle]="{'min-width': model.styles.minWidth, 'max-width': model.styles.maxWidth}">
+      <grid-header-row class="am-header-row" [model]="model" >
+      </grid-header-row>
+
+      <ng-container *ngFor="let row of rows">
+        <grid-data-row [model]="model" [row]="row" class="am-data-row">
+        </grid-data-row>
+      </ng-container>
+    </div>
+  </div>
+</div>

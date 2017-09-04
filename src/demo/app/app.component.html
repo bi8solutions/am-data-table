@@ -1,0 +1,22 @@
+<div>
+  <h2>Home</h2>
+
+  <md-card>
+  <button md-button (click)="addColumn()">Add Last Name</button>
+  <button md-button (click)="removeColumn()">Remove Column</button>
+  <button md-button (click)="addRow()">Add Row</button>
+  </md-card>
+
+  <div class="mat-elevation-z1">
+    <am-data-grid [model]="model" [dataSource]="db.dataSource">
+      <ng-template #addressFormatter let-row="row">Goodbye Cruel World :( {{row.address}} {{duff}}</ng-template>
+      <ng-template #myTemplate>Goodbye Cruel World :) :) {{duff}}</ng-template>
+    </am-data-grid>
+
+    <md-paginator #paginator
+                  [length]="db.totalSize"
+                  [pageIndex]="db.pageIndex"
+                  [pageSize]="db.pageSize"
+                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+  </div>
+</div>
