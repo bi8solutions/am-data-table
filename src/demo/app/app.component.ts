@@ -30,15 +30,18 @@ export class AppComponent implements OnInit {
   @ViewChild(MdPaginator) paginator: MdPaginator;
 
   data = {
-    total: 3,
+    total: 10,
     results: [
-      { lastModified: new Date(), company: { name: "XIB Solutions"}, firstName: 'Manie', lastName: 'Coetzee', address: '13 Pioneer Road' },
+      /*{ lastModified: new Date(), company: { name: "XIB Solutions"}, firstName: 'Manie', lastName: 'Coetzee', address: '13 Pioneer Road' },
       { lastModified: new Date(), company: { name: "Marvel"}, firstName: 'Peter', lastName: 'Parker', address: '9 Malibu' },
-      { lastModified: new Date(), company: { name: "DC Universe"}, firstName: 'Tony', lastName: 'Stark', address: '14 New York' }
+      { lastModified: new Date(), company: { name: "DC Universe"}, firstName: 'Tony', lastName: 'Stark', address: '14 New York' }*/
     ]
   };
 
   constructor(public gridService: GridService) {
+    for (let i = 0; i < 10; i++){
+      this.data.results.push({ lastModified: new Date(), company: { name: "Marvel"}, firstName: 'Peter', lastName: 'Parker', address: '9 Malibu' });
+    }
   }
 
   ngOnInit(): void {

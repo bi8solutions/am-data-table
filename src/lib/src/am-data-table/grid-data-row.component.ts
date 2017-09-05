@@ -1,5 +1,6 @@
 import {
-  AfterContentChecked, AfterViewInit, Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, Type, ViewChildren,
+  AfterContentChecked, AfterViewInit, ChangeDetectionStrategy, Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, QueryList, Type,
+  ViewChildren,
   ViewEncapsulation
 } from "@angular/core";
 import {GridModel} from "./grid-model";
@@ -17,7 +18,6 @@ import {Subscription} from "rxjs/Subscription";
   template: `
     <ng-container>
       <div *ngFor="let col of columns" class="am-data-cell" [ngStyle]="{'flex': col.styles.flex}">
-      
         <ng-template grid-data-cell></ng-template>
       </div>
     </ng-container>

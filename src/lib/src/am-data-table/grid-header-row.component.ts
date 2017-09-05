@@ -16,7 +16,6 @@ import {Subscription} from "rxjs/Subscription";
   template: `
     <ng-container>
       <div *ngFor="let col of columns" class="am-header-cell" [ngStyle]="{'flex': col.styles.flex}">
-      
         <ng-container grid-header-cell></ng-container>
       </div>
     </ng-container>
@@ -40,7 +39,7 @@ export class GridHeaderRowComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit(): void {
-    this.modelSubscription = this.model._changes.debounceTime(10).subscribe((columns: GridColumn[])=>{
+    this.modelSubscription = this.model._changes.debounceTime(1).subscribe((columns: GridColumn[])=>{
       this.columns = columns;
       this.renderHeaders();
     });

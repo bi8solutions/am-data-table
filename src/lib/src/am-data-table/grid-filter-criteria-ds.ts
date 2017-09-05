@@ -38,6 +38,7 @@ export class CriteriaTableDB {
   dataSubject = new BehaviorSubject<any[]>([]);
   dataSource: CriteriaTableDS | null;
   items: any = [];
+  lastCtx: any = {};
 
   pageSize: number = 5;
   pageIndex: number = 0;
@@ -50,7 +51,7 @@ export class CriteriaTableDB {
     this.paginator.page.subscribe((event)=>{
       this.pageSize = event.pageSize;
       this.pageIndex = event.pageIndex;
-      this.reload();
+      this.reload(this.lastCtx);
     });
   }
 
@@ -58,6 +59,7 @@ export class CriteriaTableDB {
     let criteria = ctx || {};
     criteria.page = this.pageIndex;
     criteria.size = this.pageSize;
+    this.lastCtx = criteria;
 
     this.loader.prepare(criteria).subscribe((result: any)=>{
       this.items = result.items;

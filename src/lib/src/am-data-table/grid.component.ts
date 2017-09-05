@@ -20,6 +20,7 @@ import {Subject} from "rxjs/Subject";
 import {GridService} from "./grid.service";
 
 import * as _ from 'lodash';
+import {GridColumn} from "./grid-column";
 
 @Component({
   selector: 'am-data-grid',
@@ -28,6 +29,12 @@ import * as _ from 'lodash';
   encapsulation: ViewEncapsulation.None
 })
 export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentChecked, OnChanges, CollectionViewer {
+
+  // the first thing I need to do is to know when there are row changes or column changes or individual cell changes
+  // so that I can re-render it.
+
+
+
 
   @Input() model: GridModel;
   rows: any[] = [];
@@ -39,6 +46,8 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   private _onDestroy = new Subject<void>();
   private _renderChangeSubscription: Subscription | null;
   private _dataSource: DataSource<T>;
+
+  modelSubscription: Subscription;
 
   viewChange = new BehaviorSubject<{start: number, end: number}>({start: 0, end: Number.MAX_VALUE});
 
@@ -60,8 +69,18 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   ngOnInit(): void {
   }
 
+
   ngAfterViewInit(): void {
     this.model.notifyChanges();
+
+    /*
+    this.modelSubscription = this.model._changes.subscribe((columns: GridColumn[])=>{
+      this._headerRow.renderHeaders();
+      this._rowDefinitions.forEach((rowDef, index)=>{
+        rowDef.renderCells();
+      })
+    });
+    */
   }
 
   ngAfterContentChecked(): void {
@@ -96,6 +115,11 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     if (this.dataSource) {
       this.dataSource.disconnect(this);
     }
+
+    if (this.modelSubscription){
+      this.modelSubscription.unsubscribe();
+      this.modelSubscription = null;
+    }
   }
 
   private _switchDataSource(dataSource: DataSource<T>) {
@@ -118,7 +142,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this._renderChangeSubscription = takeUntil.call(this.dataSource.connect(this), this._onDestroy)
       .subscribe(data => {
         this.rows = data;
-        this.model.notifyChanges();
+        //this.model.notifyChanges();
       });
   }
 }
