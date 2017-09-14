@@ -1,7 +1,5 @@
+import {GridColumn, GridDateFormatter, GridPropertyFormatter} from "./grid";
 import {Injectable} from "@angular/core";
-import {GridColumn} from "./grid-column";
-import {DatePropertyFormatter, PropertyFormatter} from "./grid-formatter";
-
 import * as _ from 'lodash';
 
 @Injectable()
@@ -10,19 +8,17 @@ export class GridService {
   columns : Map<string, GridColumn> = new Map();
 
   constructor(){
-    // ok, lets set some default like the date
-
     let dateCol = new GridColumn({
       type: 'date',
       key: 'date',
-      formatter: DatePropertyFormatter
-    },
-    {},
-    {
+      formatter: GridDateFormatter
+    },{
+
+    },{
       dateFormat: 'fullDate'
     });
 
-    let textCol = new GridColumn({type: 'text', key: 'text', formatter: PropertyFormatter });
+    let textCol = new GridColumn({type: 'text', key: 'text', formatter: GridPropertyFormatter });
 
     this.setDefaultColumn(dateCol.config.type, dateCol);
     this.setDefaultColumn(textCol.config.type, textCol);
@@ -40,7 +36,7 @@ export class GridService {
     if (!columns || columns.length == 0){
       return;
     }
-    
+
     columns.forEach((column, index)=>{
       let defaultColumn = this.getDefaultColumn(column.config.type);
       if (defaultColumn){

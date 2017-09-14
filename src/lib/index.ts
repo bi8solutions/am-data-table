@@ -1,17 +1,27 @@
-export { GridService } from './src/am-data-table/grid.service'
-export { GridComponent } from './src/am-data-table/grid.component'
-export { GridModel, GridModelConfig } from './src/am-data-table/grid-model'
-export { GridColumn, GridColumnConfig, GridColumnStyle } from './src/am-data-table/grid-column'
+export {
+  GridService
+} from './src/am-data-table/grid.service'
 
 export {
-  DataGridFormatter,
-  PropertyFormatter,
-  RowDataFormatter,
-  HeaderFormatter,
-  DatePropertyFormatter
-} from './src/am-data-table/grid-formatter'
+  DataTableModule
+} from './src/module'
 
-export { DataTableModule } from './src/module'
+export {
+  GridHeaderFormatter,
+  GridDataFormatter,
+  GridKeyHeaderFormatter,
+  GridPropertyFormatter,
+  GridDateFormatter,
+
+  GridComponent,
+  GridModel,
+  GridModelConfig,
+
+  GridColumn,
+  GridColumnConfig,
+  GridColumnStyle
+
+} from './src/am-data-table/grid'
 
 export {
   Operation,
@@ -21,7 +31,7 @@ export {
   SelectionMapper,
   StringSelectionMapper,
   FilterCriteriaUtils
-} from './src/am-data-table/grid-filter-criteria'
+} from './src/am-data-table/grid-criteria.ds'
 
 export {
   CriteriaSearchService,
@@ -30,4 +40,9 @@ export {
   FunctionCriteriaLoader,
   CriteriaTableDB,
   CriteriaTableDS
-} from './src/am-data-table/grid-filter-criteria-ds'
+} from './src/am-data-table/grid-criteria.ds'
+
+export {
+  ArrayDS
+} from './src/am-data-table/grid-array.ds'
+

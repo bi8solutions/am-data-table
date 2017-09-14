@@ -5,6 +5,7 @@ import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import {GridService} from "./am-data-table/grid.service";
 
 import {
   MdButtonModule,
@@ -22,33 +23,51 @@ import {
   MdToolbarModule
 } from "@angular/material";
 
-import {GridComponent} from "./am-data-table/grid.component";
-
-import {GridHeaderCellDirective} from "./am-data-table/grid-header-cell.directive";
-import {GridDataCellDirective} from "./am-data-table/grid-data-cell.directive";
-
-import {DatePropertyFormatter, HeadingFormatter, PropertyFormatter} from "./am-data-table/grid-formatter";
-import {GridHeaderRowComponent} from "./am-data-table/grid-header-row.component";
-
-import {GridDataRowComponent} from "./am-data-table/grid-data-row.component";
-import {GridService} from "./am-data-table/grid.service";
+import {
+  GridComponent,
+  DataCell,
+  DataCellDef,
+  DataRow,
+  DataRowDef,
+  GridDateFormatter,
+  GridKeyHeaderFormatter,
+  GridPropertyFormatter,
+  HeaderCell,
+  HeaderCellDef,
+  HeaderRow,
+  HeaderRowDef,
+  HeaderRowOutlet,
+  DataRowOutlet,
+  RowOutlet,
+  ExpanderOutlet,
+  CellOutlet
+} from "./am-data-table/grid";
 
 @NgModule({
     exports: [
-      PropertyFormatter,
-      DatePropertyFormatter,
-      HeadingFormatter,
       GridComponent
     ],
     declarations: [
-      GridHeaderCellDirective,
-      GridDataCellDirective,
       GridComponent,
-      PropertyFormatter,
-      DatePropertyFormatter,
-      HeadingFormatter,
-      GridHeaderRowComponent,
-      GridDataRowComponent
+      HeaderRowDef,
+      HeaderRow,
+      HeaderCellDef,
+      HeaderCell,
+
+      DataRowDef,
+      DataRow,
+      DataCellDef,
+      DataCell,
+
+      HeaderRowOutlet,
+      DataRowOutlet,
+      RowOutlet,
+      ExpanderOutlet,
+      CellOutlet,
+
+      GridKeyHeaderFormatter,
+      GridPropertyFormatter,
+      GridDateFormatter
     ],
     imports: [
       CommonModule,
@@ -72,7 +91,11 @@ import {GridService} from "./am-data-table/grid.service";
       MdMenuModule,
       MdListModule
     ],
-    entryComponents: [PropertyFormatter, DatePropertyFormatter, HeadingFormatter],
+    entryComponents: [
+      GridKeyHeaderFormatter,
+      GridPropertyFormatter,
+      GridDateFormatter
+    ],
     providers: [GridService]
 })
 export class DataTableModule {

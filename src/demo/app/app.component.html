@@ -1,4 +1,46 @@
 <div>
+  <h2>Template Examples</h2>
+
+  <md-card>
+    <button (click)="reload()">Reload</button>
+
+    <button (click)="addColumn()">Add Column</button>
+    <button (click)="insertColumn(1)">Insert Column (1)</button>
+    <button (click)="removeColumn(0)">Remove Column(0)</button>
+
+    <button (click)="addRow()">Add Row</button>
+    <button (click)="insertRow(1)">Insert Row (1)</button>
+    <button (click)="removeRow(0)">Remove Row (0)</button>
+  </md-card>
+
+  <div class="mat-elevation-z1">
+    <am-data-grid [model]="gridModel" [dataSource]="arrayDS">
+      <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
+      <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
+      <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>
+
+      <ng-template #expanderTemplate let-row="row">
+        {{message}}
+        <table>
+          <tr><th>First Name</th><td>{{row.data.firstName}}</td></tr>
+          <tr><th>Last Name</th><td>{{row.data.lastName}}</td></tr>
+          <tr><th>Mobile</th><td>{{row.data.mobile}}</td></tr>
+          <tr><th>Email</th><td>{{row.data.email}}</td></tr>
+        </table>
+      </ng-template>
+
+    </am-data-grid>
+    <md-paginator #paginator
+                  [length]="arrayDS.totalSize"
+                  [pageIndex]="arrayDS.pageIndex"
+                  [pageSize]="arrayDS.pageSize"
+                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+  </div>
+</div>
+
+
+<!--
+<div>
   <h2>Home</h2>
 
   <md-card>
@@ -19,4 +61,4 @@
                   [pageSize]="db.pageSize"
                   [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
   </div>
-</div>
+</div>-->
