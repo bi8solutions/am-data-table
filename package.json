@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "description": "Angular Material Data Table",
   "main": "./am-data-table.umd.js",
   "module": "./am-data-table.es5.js",
@@ -81,7 +81,7 @@
     "raw-loader": "0.5.1",
     "reflect-metadata": "^0.1.10",
     "remap-istanbul": "^0.6.4",
-    "rimraf": "^2.6.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.41.5",
     "rollup-plugin-sourcemaps": "^0.4.1",
     "rollup-plugin-uglify": "^1.0.1",
