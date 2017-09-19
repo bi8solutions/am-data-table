@@ -39,6 +39,11 @@ export class ArrayDS extends DataSource<any[]> {
     this.itemSource$.next(pages[this.pageIndex]);
   }
 
+  addAll(items: any[]){
+    this.items = this.items.concat(items);
+    this.reload();
+  }
+
   addItem(item: any){
     this.items.push(item);
     this.reload();

@@ -62,11 +62,11 @@ export class AppComponent implements OnInit {
 
     this.gridModel = new GridModel({showExpander: true, expanderTemplate: this.expanderTemplate});
     this.gridModel.addColumn(this.firstNameColumn);
-    this.gridModel.addColumn(new GridColumn({key: 'lastName'}));
-    this.gridModel.addColumn(new GridColumn({key: 'nickName'}));
-    this.gridModel.addColumn(new GridColumn({key: 'email'}));
-    this.gridModel.addColumn(new GridColumn({key: 'mobile'}));
-    this.gridModel.addColumn(new GridColumn({key: 'landLine'}));
+    this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}));
+    this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 2}));
+    this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
+    this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
+    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 1}));
   }
 
   reload(){
@@ -115,6 +115,10 @@ export class AppComponent implements OnInit {
 
   removeRow(index: number){
     this.arrayDS.removeItemByIndex(index);
+  }
+
+  updateFirstName(){
+    this.arrayDS.items[0].lastName = "Bla die Bla Bla Bla";
   }
 }
 

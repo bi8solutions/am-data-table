@@ -19,7 +19,9 @@ export {
 
   GridColumn,
   GridColumnConfig,
-  GridColumnStyle
+  GridColumnStyle,
+
+  RowContext
 
 } from './src/am-data-table/grid'
 

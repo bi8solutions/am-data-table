@@ -105,7 +105,7 @@ export class HeaderCellDef {
     'role': 'row',
   },
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChanges {
 
@@ -119,6 +119,7 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
 
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-header-cell-${toCssFriendly(this.column.config.key)}`);
+    this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -172,7 +173,7 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
     'role': 'row',
   },
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderRow implements AfterContentInit {
 
@@ -287,7 +288,7 @@ export class DataCellDef {
     'role': 'row',
   },
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataCell implements OnInit, AfterContentInit {
 
@@ -302,6 +303,11 @@ export class DataCell implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-data-cell-${toCssFriendly(this.column.config.key)}`);
+    //if (this.column.styles.flex){
+    //  this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex);
+    //} else {
+      this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
+    //}
   }
 
   ngAfterContentInit(): void {
@@ -407,7 +413,7 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
     'role': 'row',
   },
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataRow implements AfterContentInit {
 
@@ -500,7 +506,7 @@ export class DataRow implements AfterContentInit {
     </div>
   `,
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
 
@@ -635,22 +641,22 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       return;
     }
 
+    // remove
+    changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
+      console.log("removing existing row", record);
+      this._dataRowOutlet.viewContainer.remove(record.previousIndex);
+    });
+
     // add, insert
     changes.forEachAddedItem((record: IterableChangeRecord<T>)=>{
-      //////////////console.log("adding/inserting new row", record);
+      console.log("adding/inserting new row", record);
       let rowContext: RowContext = {
         data: record.item,
         model: this.model,
         expanded: false
       };
 
-      this._dataRowOutlet.viewContainer.createEmbeddedView(this._dataRowDef.templateRef, {$implicit: rowContext});
-    });
-
-    // remove
-    changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
-      //////////////console.log("removing existing row", record);
-      this._dataRowOutlet.viewContainer.remove(record.previousIndex);
+      this._dataRowOutlet.viewContainer.createEmbeddedView(this._dataRowDef.templateRef, {$implicit: rowContext}, record.currentIndex);
     });
 
     // then tell Angular to do it's checks
@@ -889,7 +895,7 @@ export class GridPropertyFormatter implements GridDataFormatter {
 }
 
 @Component({
-  template: `{{getValue() | date : getFormat()}}`
+  template: `{{getValue() || '' | date : getFormat()}}`
 })
 export class GridDateFormatter extends GridPropertyFormatter {
   @Input() column: GridColumn;

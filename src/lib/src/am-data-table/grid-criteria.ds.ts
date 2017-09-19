@@ -225,6 +225,7 @@ export class CriteriaTableDB {
     this.loader.prepare(criteria).subscribe((result: any)=>{
       this.items = result.items;
       this.totalSize = result.total;
+      this.items = result.items;
       this.dataSubject.next(result.items);
     });
   }
