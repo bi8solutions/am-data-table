@@ -21,7 +21,9 @@ export {
   GridColumnConfig,
   GridColumnStyle,
 
-  RowContext
+  RowContext,
+  GridEvent,
+  GridEventType
 
 } from './src/am-data-table/grid'
 

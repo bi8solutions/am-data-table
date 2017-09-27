@@ -7,7 +7,7 @@ import {
   Component,
   ComponentFactoryResolver,
   Directive,
-  ElementRef, forwardRef, Inject,
+  ElementRef, EventEmitter, forwardRef, Inject,
   Input,
   IterableChangeRecord,
   IterableChanges,
@@ -15,7 +15,7 @@ import {
   IterableDiffers,
   OnChanges,
   OnDestroy,
-  OnInit,
+  OnInit, Output,
   QueryList,
   Renderer2,
   SimpleChanges,
@@ -177,6 +177,8 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
 })
 export class HeaderRow implements AfterContentInit {
 
+  @Output('events') events$ = new EventEmitter<GridEvent>();
+
   @ViewChild(RowOutlet) _rowOutlet: RowOutlet;
   @ViewChild(HeaderCellDef) _headerCellDef: HeaderCellDef;
   @ViewChildren(HeaderCell) headerCells : QueryList<HeaderCell>;
@@ -215,16 +217,26 @@ export class HeaderRow implements AfterContentInit {
       return;
     }
 
-    // add, insert
-    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>)=>{
-       //console.log("adding/inserting new cell for new column", record);
-       this.renderHeaderCell(record.item, record.currentIndex);
-    });
-
     // remove
     changes.forEachRemovedItem((record: IterableChangeRecord<GridColumn>)=>{
       //console.log("removing existing cell", record);
       this._rowOutlet.viewContainer.remove(record.previousIndex);
+
+      this.events$.emit({
+        type: GridEventType.ColumnRemoved,
+        data: record
+      });
+    });
+
+    // add, insert
+    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>)=>{
+       //console.log("adding/inserting new cell for new column", record);
+       this.renderHeaderCell(record.item, record.currentIndex);
+
+      this.events$.emit({
+        type: GridEventType.ColumnAdded,
+        data: record
+      });
     });
 
     // then tell Angular to do it's checks
@@ -367,6 +379,28 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
     GridColumn
     StackedGridColumn
     
+    ok, so basically I ant to generate events when certain thing happen in the grid.  If it's an row expansion, I want to get an handle to that row
+    when it contracts or when it expands.  There must be some way we can set the expanded row on the component (two way binding or it emits an 
+    event).  Ok, so lets say I want to update the progress bar, what would I do.
+    
+    First, I need to communicate to the parent that a new campaign has been expanded. This will set the current row on the main component
+    
+    
+    Each row component must be able to see their parent.  This can be done by setting 
+    
+    emit({
+      type: RowExpanded / RowContracted,
+      data: record
+    })
+    
+    emit({
+      type: RowAdded, RowRemoved
+      data: record
+    })
+            
+    
+    I would also like the ability 
+    
  
     [ wildcard search ] - across all columns        
     ---------------------------------------------------------------------   
@@ -416,6 +450,8 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataRow implements AfterContentInit {
+
+  @Output('events') events$ = new EventEmitter<GridEvent>();
 
   @ViewChild(RowOutlet) _rowOutlet: RowOutlet;
   @ViewChild(DataCellDef) _dataCellDef: DataCellDef;
@@ -476,6 +512,7 @@ export class DataRow implements AfterContentInit {
   toggleExpander(){
     this._expanderOutlet.viewContainer.clear();
 
+
     if (this.row.expanded){
       this.row.expanded = false;
       this.expanderIcon = EXPANDER_ICON_CLOSED;
@@ -488,6 +525,11 @@ export class DataRow implements AfterContentInit {
         this._expanderOutlet.viewContainer.createEmbeddedView(this.row.model.config.expanderTemplate, {row: this.row});
       }
     }
+
+    this.events$.emit({
+      type: this.row.expanded ? GridEventType.RowExpanded : GridEventType.RowContracted,
+      data: this.row
+    });
   }
 }
 
@@ -500,8 +542,8 @@ export class DataRow implements AfterContentInit {
       <ng-container headerRowOutlet></ng-container>
       <ng-container dataRowOutlet></ng-container>
       <ng-container>
-        <header-row *headerRowDef="let model" [model]="model"></header-row>
-        <data-row *dataRowDef="let row" [row]="row"></data-row>    
+        <header-row *headerRowDef="let model" [model]="model" (events)="emit($event)"></header-row>
+        <data-row *dataRowDef="let row" [row]="row" (events)="emit($event)"></data-row>    
       </ng-container>  
     </div>
   `,
@@ -509,6 +551,8 @@ export class DataRow implements AfterContentInit {
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
+
+  @Output('events') events$ = new EventEmitter<GridEvent>();
 
   data: any[] = [];
   @Input() model: GridModel;
@@ -553,6 +597,11 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
               protected _changeDetectorRef: ChangeDetectorRef){
   }
 
+  emit(event){
+    console.log(`Grid Event ${GridEventType[event.type]}:`, event);
+    this.events$.emit(event);
+  }
+
   ngOnInit(): void {
     // create the columns differ to track changes to the column array
     this.columnsDiffer = this._differs.find(this.model.columns).create();
@@ -566,7 +615,6 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     // do the initial diff so that the next one will show any changes when doing the next diff
     this.columnsDiffer.diff(this.model.columns);
-
 
     // ok, lets setup/render the header row
     this.setupHeader();
@@ -641,10 +689,17 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       return;
     }
 
+
+
     // remove
     changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
       console.log("removing existing row", record);
       this._dataRowOutlet.viewContainer.remove(record.previousIndex);
+
+      this.emit({
+        type: GridEventType.RowRemoved,
+        data: record
+      });
     });
 
     // add, insert
@@ -657,6 +712,17 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       };
 
       this._dataRowOutlet.viewContainer.createEmbeddedView(this._dataRowDef.templateRef, {$implicit: rowContext}, record.currentIndex);
+
+      this.emit({
+        type: GridEventType.RowAdded,
+        data: record
+      });
+    });
+
+    //@Todo - not the right place - just a temporary work around
+    this.emit({
+      type: GridEventType.Reloaded,
+      data: this.data
     });
 
     // then tell Angular to do it's checks
@@ -693,6 +759,22 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       });
     }
   }
+}
+
+export enum GridEventType {
+  RowExpanded,
+  RowContracted,
+  RowRemoved,
+  RowAdded,
+  Reloaded,
+  ColumnRemoved,
+  ColumnAdded,
+  DataChange
+}
+
+export interface GridEvent {
+  type: GridEventType,
+  data?: any
 }
 
 //=====[ GRID MODEL ]=================================================================================================================================
