@@ -120,6 +120,19 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-header-cell-${toCssFriendly(this.column.config.key)}`);
     this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
+
+    if (this.column.styles.minWidth){
+      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
+
+    } else if (this.column.model.styles.minColumnWidth){
+      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+    }
+
+    if (this.column.styles.headerCellStyleClasses){
+      this.column.styles.headerCellStyleClasses.forEach((cls, index)=>{
+        this.renderer.addClass(this.elementRef.nativeElement, cls);
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -315,11 +328,20 @@ export class DataCell implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-data-cell-${toCssFriendly(this.column.config.key)}`);
-    //if (this.column.styles.flex){
-    //  this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex);
-    //} else {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
-    //}
+    this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
+
+    if (this.column.styles.minWidth){
+      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
+
+    } else if (this.column.model.styles.minColumnWidth){
+      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+    }
+
+    if (this.column.styles.dataCellStyleClasses){
+      this.column.styles.dataCellStyleClasses.forEach((cls, index)=>{
+        this.renderer.addClass(this.elementRef.nativeElement, cls);
+      });
+    }
   }
 
   ngAfterContentInit(): void {
@@ -379,14 +401,7 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
     GridColumn
     StackedGridColumn
     
-    ok, so basically I ant to generate events when certain thing happen in the grid.  If it's an row expansion, I want to get an handle to that row
-    when it contracts or when it expands.  There must be some way we can set the expanded row on the component (two way binding or it emits an 
-    event).  Ok, so lets say I want to update the progress bar, what would I do.
-    
-    First, I need to communicate to the parent that a new campaign has been expanded. This will set the current row on the main component
-    
-    
-    Each row component must be able to see their parent.  This can be done by setting 
+     
     
     emit({
       type: RowExpanded / RowContracted,
@@ -400,7 +415,6 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
             
     
     I would also like the ability 
-    
  
     [ wildcard search ] - across all columns        
     ---------------------------------------------------------------------   
@@ -790,8 +804,7 @@ export interface GridModelStyles {
   containerClasses?: string[],
   gridClasses?: string[],
   scrollX?: boolean,
-  minWidth?: string,
-  maxWidth?: string
+  minColumnWidth?: string
 }
 
 export enum GridModelEventType {
@@ -824,8 +837,7 @@ export class GridModel {
       containerClasses: !_.isNil(styles.containerClasses) ?  styles.containerClasses : [],
       gridClasses: !_.isNil(styles.containerClasses) ? styles.containerClasses : [],
       scrollX: !_.isNil(styles.scrollX) ? styles.scrollX : false,
-      minWidth: !_.isNil(styles.minWidth) ? styles.minWidth : null,
-      maxWidth: !_.isNil(styles.maxWidth) ? styles.maxWidth : null,
+      minColumnWidth: !_.isNil(styles.minColumnWidth) ? styles.minColumnWidth : null
     };
   }
 

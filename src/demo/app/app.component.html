@@ -1,6 +1,140 @@
 <div>
   <h2>Template Examples</h2>
 
+  <div>
+    <div style="display: flex; flex-direction: row;">
+      <div style="flex: 1; background: green">
+      Hell World
+      </div>
+      <div style="flex: 1; background: purple; overflow: hidden;">
+        <div class="container">
+          <div class="box">
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+            <div class="element">hello world - goodbye cruel world</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <hr/>
+
+
+  <!-- Maybe look at creating a component that will scroll it's content -->
+
+  <!--<md-card>
+    <div class="test-grid-container">
+      <div class="test-grid">
+        <div class="test-grid-wrapper">
+          <div class="test-grid-inner-wrapper">
+            <div class="test-header-row">
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell double">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+              <div class="test-cell">I am a Header Cell</div>
+            </div>
+            <div class="test-data-row">
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell double">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+            </div>
+            <div class="test-data-row">
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell double">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <md-paginator #paginator
+                  [length]="arrayDS.totalSize"
+                  [pageIndex]="arrayDS.pageIndex"
+                  [pageSize]="arrayDS.pageSize"
+                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+
+
+    <am-selector #selector
+                 [template]="displayTemplate"
+                 [provider]="pageSelectionProvider" -> The provider will listen for grid events
+                 [pageSize]="arrayDS.pageSize"
+                 [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+  </md-card>-->
+
+
+
+  <!--
+  Ok, so what do I want to do?
+
+  I want to have a selection that I give some kind of provider to store it in.  The selection could potentially
+  be stored in the back-end or it can be stored in the front end (memory or local storage)
+
+  I could be that I only want to save the keys instead of the complete object - so only the jeys are stored,
+  not the whole value.
+
+  Have a total size and a selection size
+
+  It could be persistent meaning that when I page between lists, the selection is maintained (potentially in memory)
+
+
+  I must be able to select / clear selections for the current page
+  I must be able to select / clear selections for the total list
+  I must be able to display a selection string (label - using a template if the default message are not acceptable)
+  I must get an event when there are a selection change (add, remove)
+
+  Have a checkbox field
+  When selecting, then get the selection provider and click set/unset
+
+
+
+
+
+
+  -->
+
+
   <md-card>
     <button (click)="reload()">Reload</button>
 
@@ -12,32 +146,38 @@
     <button (click)="insertRow(1)">Insert Row (1)</button>
     <button (click)="removeRow(0)">Remove Row (0)</button>
 
-
     <button (click)="updateFirstName()">Update First Name</button>
   </md-card>
 
-  <div class="mat-elevation-z1">
-    <am-data-grid [model]="gridModel" [dataSource]="arrayDS">
-      <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
-      <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
-      <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>
 
-      <ng-template #expanderTemplate let-row="row">
-        {{message}}
-        <table>
-          <tr><th>First Name</th><td>{{row.data.firstName}}</td></tr>
-          <tr><th>Last Name</th><td>{{row.data.lastName}}</td></tr>
-          <tr><th>Mobile</th><td>{{row.data.mobile}}</td></tr>
-          <tr><th>Email</th><td>{{row.data.email}}</td></tr>
-        </table>
-      </ng-template>
+  <div style="display: flex; flex-direction: column;">
+    <div>
+      I'm on top
+    </div>
+    <div style="background: red; display:flex; flex-direction: row;">
+      <div style="flex: 1;">Hello World</div>
+      <div style="flex: 1;">Goodbye Cruel World</div>
+      <div class="mat-elevation-z1">
+        <am-data-grid [model]="gridModel" [dataSource]="arrayDS">
+          <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
+          <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
+          <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>
 
-    </am-data-grid>
-    <md-paginator #paginator
-                  [length]="arrayDS.totalSize"
-                  [pageIndex]="arrayDS.pageIndex"
-                  [pageSize]="arrayDS.pageSize"
-                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+          <ng-template #expanderTemplate let-row="row">
+            Hello World
+          </ng-template>
+        </am-data-grid>
+
+        <md-paginator #paginator
+                      [length]="arrayDS.totalSize"
+                      [pageIndex]="arrayDS.pageIndex"
+                      [pageSize]="arrayDS.pageSize"
+                      [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+      </div>
+    </div>
+    <div>
+    I'm at the bottom
+    </div>
   </div>
 </div>
 

@@ -60,13 +60,20 @@ export class AppComponent implements OnInit {
       dataTemplate: this.firstNameDataTemplate
     });
 
-    this.gridModel = new GridModel({showExpander: true, expanderTemplate: this.expanderTemplate});
+    this.gridModel = new GridModel({
+      showExpander: true,
+      expanderTemplate: this.expanderTemplate,
+    }, {
+      minColumnWidth: "100px"
+    });
+
+    this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
     this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}));
-    this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 2}));
+    this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 3}));
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
-    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 1}));
+    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));
   }
 
   reload(){
