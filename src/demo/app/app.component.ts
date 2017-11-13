@@ -3,6 +3,7 @@ import {Observable} from "rxjs/Observable";
 
 import {
   GridModel,
+  GridComponent,
   GridColumn,
   CriteriaTableDB,
   FunctionCriteriaLoader,
@@ -38,10 +39,15 @@ export class AppComponent implements OnInit {
   firstNameColumn: GridColumn;
   peterParker: any;
 
+  @ViewChild("grid") private grid: GridComponent<any>;
+
   constructor() {
   }
 
-
+  toggleExpander(){
+    console.log(this.grid);
+    this.grid.toggleRowExpander(0);
+  }
 
   ngOnInit(): void {
     console.log("============?> ", this.paginator);

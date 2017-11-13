@@ -611,6 +611,13 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
               protected _changeDetectorRef: ChangeDetectorRef){
   }
 
+  toggleRowExpander(index: number){
+    try {
+      this.dataRows.toArray()[index].toggleExpander();
+    } catch (error){
+    }
+  }
+
   emit(event){
     console.log(`Grid Event ${GridEventType[event.type]}:`, event);
     this.events$.emit(event);
@@ -824,6 +831,7 @@ export class GridModel {
   styles: GridModelStyles;
   columns: GridColumn[] = [];
   _changes = new Subject<GridModelEvent>();
+  //grid: GridComponent<any>;
 
   constructor(config: GridModelConfig = {}, styles: GridModelStyles = {}){
     this.config = {
@@ -840,6 +848,10 @@ export class GridModel {
       minColumnWidth: !_.isNil(styles.minColumnWidth) ? styles.minColumnWidth : null
     };
   }
+
+  //toggleExpander(index: number){
+  //  this.grid.toggleRowExpander(index);
+  //}
 
   addColumn(column: GridColumn){
     column.model = this;

@@ -147,6 +147,8 @@
     <button (click)="removeRow(0)">Remove Row (0)</button>
 
     <button (click)="updateFirstName()">Update First Name</button>
+
+    <button (click)="toggleExpander()">Toggle Expander</button>
   </md-card>
 
 
@@ -158,7 +160,7 @@
       <div style="flex: 1;">Hello World</div>
       <div style="flex: 1;">Goodbye Cruel World</div>
       <div class="mat-elevation-z1">
-        <am-data-grid [model]="gridModel" [dataSource]="arrayDS">
+        <am-data-grid #grid [model]="gridModel" [dataSource]="arrayDS">
           <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
           <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
           <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>
