@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "0.1.25",
+  "version": "1.0.0",
   "description": "Angular Material Data Table",
   "main": "./am-data-table.umd.js",
   "module": "./am-data-table.es5.js",
