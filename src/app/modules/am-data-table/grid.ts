@@ -7,7 +7,7 @@ import {
   Component,
   ComponentFactoryResolver,
   Directive,
-  ElementRef, EventEmitter, forwardRef, Inject,
+  ElementRef, EventEmitter, forwardRef, Inject, Injectable,
   Input,
   IterableChangeRecord,
   IterableChanges,
@@ -31,10 +31,10 @@ import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {takeUntil} from "@angular/cdk/rxjs";
-import {GridService} from "./grid.service";
 
 import * as _ from 'lodash';
+import {takeUntil} from "rxjs/operator/takeUntil";
+
 
 //=====[ UTILS ]======================================================================================================================================
 
@@ -147,7 +147,7 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
 
   renderCell(){
     this._cellOutlet.viewContainer.clear();
-    
+
     if (this.column.config.headingTemplate){
       this._cellOutlet.viewContainer.createEmbeddedView(this.column.config.headingTemplate, {column: this.column});
 
@@ -444,7 +444,7 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
     <div style="flex: 1 1 auto;">
       <div style="display: flex; flex: 1 1 auto;" [ngClass]="{'am-expanded-row': row.expanded}">
         <div *ngIf="row.model.config.showExpander" class="am-header-expander-column">
-          <md-icon (click)="toggleExpander()">{{expanderIcon}}</md-icon>
+          <mat-icon (click)="toggleExpander()">{{expanderIcon}}</mat-icon>
         </div>
         <ng-container rowOutlet></ng-container>
       </div>
@@ -606,9 +606,11 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   viewChange = new BehaviorSubject<{start: number, end: number}>({start: 0, end: Number.MAX_VALUE});
 
-  constructor(@Inject(forwardRef(() => GridService)) private gridService: GridService,
-              protected _differs: IterableDiffers,
+  gridDefaults: GridDefaults = new GridDefaults();
+
+  constructor(protected _differs: IterableDiffers,
               protected _changeDetectorRef: ChangeDetectorRef){
+
   }
 
   toggleRowExpander(index: number){
@@ -632,7 +634,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   ngAfterContentInit(): void {
     // make sure that all the column override/default templates/formatters are applied
-    this.gridService.applyDefaults(this.model.columns);
+    this.gridDefaults.applyDefaults(this.model.columns);
 
     // do the initial diff so that the next one will show any changes when doing the next diff
     this.columnsDiffer.diff(this.model.columns);
@@ -680,7 +682,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   gridModelChanged(event?: GridModelEvent){
 
     // always apply defaults (default data and header formatter if none specified)
-    this.gridService.applyDefaults(this.model.columns);
+    this.gridDefaults.applyDefaults(this.model.columns);
 
     // first we do the diff to get the changes (if any)
     let changes = this.columnsDiffer.diff(this.model.columns);
@@ -1027,3 +1029,48 @@ export interface GridExpanderFormatter {
   row: RowContext;
 }
 
+//=====[ GRID DEFAULTS ]==============================================================================================================================
+
+export class GridDefaults {
+
+  columns : Map<string, GridColumn> = new Map();
+
+  constructor(){
+    let dateCol = new GridColumn({
+      type: 'date',
+      key: 'date',
+      formatter: GridDateFormatter
+    },{
+
+    },{
+      dateFormat: 'fullDate'
+    });
+
+    let textCol = new GridColumn({type: 'text', key: 'text', formatter: GridPropertyFormatter });
+
+    this.setDefaultColumn(dateCol.config.type, dateCol);
+    this.setDefaultColumn(textCol.config.type, textCol);
+  }
+
+  setDefaultColumn(type: string, column: GridColumn){
+    this.columns.set(type, column);
+  }
+
+  getDefaultColumn(type: string) : GridColumn {
+    return this.columns.get(type);
+  }
+
+  applyDefaults(columns: GridColumn[]){
+    if (!columns || columns.length == 0){
+      return;
+    }
+
+    columns.forEach((column, index)=>{
+      let defaultColumn = this.getDefaultColumn(column.config.type);
+      if (defaultColumn){
+        _.defaultsDeep(column, defaultColumn);
+        //console.log(column);
+      }
+    });
+  }
+}

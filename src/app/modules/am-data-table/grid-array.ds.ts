@@ -1,9 +1,9 @@
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {DataSource} from "@angular/cdk/collections";
-import {MdPaginator} from "@angular/material";
+import {MatPaginator} from "@angular/material";
 import {Observable} from "rxjs/Observable";
 
 import * as _ from 'lodash';
+import {DataSource} from "@angular/cdk/collections";
 
 export class ArrayDS extends DataSource<any[]> {
 
@@ -14,7 +14,7 @@ export class ArrayDS extends DataSource<any[]> {
   pageIndex: number = 0;
   totalSize: number = 0;
 
-  constructor(private paginator?: MdPaginator) {
+  constructor(private paginator?: MatPaginator) {
     super ();
 
     if (this.paginator) {

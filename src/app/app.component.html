@@ -135,7 +135,7 @@
   -->
 
 
-  <md-card>
+  <mat-card>
     <button (click)="reload()">Reload</button>
 
     <button (click)="addColumn()">Add Column</button>
@@ -149,7 +149,7 @@
     <button (click)="updateFirstName()">Update First Name</button>
 
     <button (click)="toggleExpander()">Toggle Expander</button>
-  </md-card>
+  </mat-card>
 
 
   <div style="display: flex; flex-direction: column;">
@@ -157,8 +157,6 @@
       I'm on top
     </div>
     <div style="background: red; display:flex; flex-direction: row;">
-      <div style="flex: 1;">Hello World</div>
-      <div style="flex: 1;">Goodbye Cruel World</div>
       <div class="mat-elevation-z1">
         <am-data-grid #grid [model]="gridModel" [dataSource]="arrayDS">
           <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
@@ -170,11 +168,11 @@
           </ng-template>
         </am-data-grid>
 
-        <md-paginator #paginator
+        <mat-paginator #paginator
                       [length]="arrayDS.totalSize"
                       [pageIndex]="arrayDS.pageIndex"
                       [pageSize]="arrayDS.pageSize"
-                      [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
+                      [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></mat-paginator>
       </div>
     </div>
     <div>

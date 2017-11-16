@@ -1,5 +1,5 @@
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {MdPaginator} from "@angular/material";
+import {MatPaginator} from "@angular/material";
 import {DataSource} from "@angular/cdk/collections";
 import { Observable } from 'rxjs';
 
@@ -206,7 +206,7 @@ export class CriteriaTableDB {
   totalSize: number = 0;
 
   constructor(private loader : CriteriaLoader,
-              private paginator: MdPaginator){
+              private paginator: MatPaginator){
 
     this.dataSource = new CriteriaTableDS(this.dataSubject);
     this.paginator.page.subscribe((event)=>{
