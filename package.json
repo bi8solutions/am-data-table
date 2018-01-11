@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "packagr": "ng-packagr -p ng-package.json && copyfiles -u 4 src/assets/styles/scss/*.* dist/scss && copyfiles -u 1 etc/_theming.scss dist",
+    "packagr": "ng-packagr -p ng-package.json",
     "serve": "ng serve --ssl --proxy-config proxy-conf.json --port 8000"
   },
   "private": false,
