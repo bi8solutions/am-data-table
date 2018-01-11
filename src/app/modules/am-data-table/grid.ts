@@ -34,6 +34,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
+import { setTimeout } from "timers";
 
 
 //=====[ UTILS ]======================================================================================================================================
@@ -567,7 +568,7 @@ export class DataRow implements AfterContentInit {
 export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
 
   @Output('events') events$ = new EventEmitter<GridEvent>();
-
+  @Input() expandRowIndex: number;
   data: any[] = [];
   @Input() model: GridModel;
 
@@ -613,10 +614,11 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   }
 
-  toggleRowExpander(index: number){
+  toggleRowExpander(index: number){    
     try {
-      this.dataRows.toArray()[index].toggleExpander();
+      this.dataRows.toArray()[index].toggleExpander();      
     } catch (error){
+      console.log(error);
     }
   }
 
@@ -644,16 +646,22 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     this.observeModel();
     this.observeDataSource();
+    
   }
 
   ngAfterContentChecked(): void {
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => {
+    if (this.expandRowIndex) {      
+      this.toggleRowExpander(this.expandRowIndex);
+    }
+  }, 200);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("GirdComponent: ngOnChanges");
+    console.log("GridComponent: ngOnChanges");
   }
 
   ngOnDestroy(): void {
