@@ -1,6 +1,7 @@
 import {
   AfterContentChecked,
   AfterContentInit,
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -18,6 +19,7 @@ import {
   OnInit, Output,
   QueryList,
   Renderer2,
+  SimpleChange,
   SimpleChanges,
   TemplateRef,
   Type,
@@ -34,6 +36,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
+
 
 
 
@@ -631,7 +634,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     // create the columns differ to track changes to the column array
     this.columnsDiffer = this._differs.find(this.model.columns).create();
 
-    this.dataDiffer = this._differs.find([]).create();
+    this.dataDiffer = this._differs.find([]).create();    
   }
 
   ngAfterContentInit(): void {
@@ -645,23 +648,30 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this.setupHeader();
 
     this.observeModel();
-    this.observeDataSource();
+    this.observeDataSource();    
+  }
+
+  ngAfterContentChecked(): void {    
+  }
+
+  ngAfterViewInit(): void {            
+  }
+
+  ngAfterViewChecked() {
     
-  }
-
-  ngAfterContentChecked(): void {
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-    if (this.expandRowIndex) {      
-      this.toggleRowExpander(this.expandRowIndex);
-    }
-  }, 200);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log("GridComponent: ngOnChanges");
+    const index: SimpleChange = changes.expandRowIndex;		    
+    console.log(index.currentValue);
+    this.expandRowIndex = index.currentValue;
+    //this.ngAfterViewChecked();
+    if (this.expandRowIndex !== undefined) {
+      this.toggleRowExpander(this.expandRowIndex);
+    }
+
+    //console.log(this.expandRowIndex);    
   }
 
   ngOnDestroy(): void {
@@ -680,7 +690,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   setupHeader(){
-    // lets clear the row outlet container to make sure everything is squaky clean
+    // lets clear the row outlet container to make sure everything is squeeky clean
     this._headerRowOutlet.viewContainer.clear();
 
     // render the template that contains the header row component
@@ -711,7 +721,9 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     });
 
     // make sure that our component is checked for any other changes
+    
     this._changeDetectorRef.markForCheck();
+    
   }
 
   dataSourceDataChanged(){

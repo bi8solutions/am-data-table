@@ -10,6 +10,7 @@ import {MatPaginator} from "@angular/material";
 })
 export class AppComponent implements OnInit {
   title = 'app';
+  expandRowIndex: number;
 
   gridModel: GridModel;
   data: any[] = [];
@@ -40,6 +41,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     console.log("============?> ", this.paginator);
     this.arrayDS = new ArrayDS(this.paginator);
+    
 
     this.peterParker = {
       firstName: "Peter", lastName: "Parker", nickName: 'Spiderman', email: "peter.parekr@marvel.com", mobile: "082444", landLine: "0215649595"
@@ -68,6 +70,10 @@ export class AppComponent implements OnInit {
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));
+    //test dynamic column expansion with async rest calls
+    setTimeout(() => {
+      this.expandRowIndex = 0;
+    }, 5000);
   }
 
   reload(){
