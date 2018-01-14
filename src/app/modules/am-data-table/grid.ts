@@ -568,10 +568,8 @@ export class DataRow implements AfterContentInit {
   encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
-
-  @Output('events') events$ = new EventEmitter<GridEvent>();
-  @Input() expandRowIndex: number;
+export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {  
+  @Output('events') events$ = new EventEmitter<GridEvent>();  
   data: any[] = [];
   @Input() model: GridModel;
 
@@ -649,29 +647,28 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     this.observeModel();
     this.observeDataSource();    
+    
   }
 
   ngAfterContentChecked(): void {    
+    
   }
 
-  ngAfterViewInit(): void {            
+  ngAfterViewInit(): void {                
+    this.toggleRowExpander(this.model.config.expandRowIndex);    
   }
 
   ngAfterViewChecked() {
+    this.toggleRowExpander(this.model.config.expandRowIndex);    
+    this._changeDetectorRef.detectChanges();
+    
     
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("GridComponent: ngOnChanges");
-    const index: SimpleChange = changes.expandRowIndex;		    
-    console.log(index.currentValue);
-    this.expandRowIndex = index.currentValue;
-    //this.ngAfterViewChecked();
-    if (this.expandRowIndex !== undefined) {
-      this.toggleRowExpander(this.expandRowIndex);
-    }
-
-    //console.log(this.expandRowIndex);    
+    console.log("GridComponent: ngOnChanges");    
+    console.log(this.model.config.expandRowIndex);
+    
   }
 
   ngOnDestroy(): void {
@@ -701,7 +698,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     // always apply defaults (default data and header formatter if none specified)
     this.gridDefaults.applyDefaults(this.model.columns);
-
+    
     // first we do the diff to get the changes (if any)
     let changes = this.columnsDiffer.diff(this.model.columns);
 
@@ -721,9 +718,11 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     });
 
     // make sure that our component is checked for any other changes
-    
+
     this._changeDetectorRef.markForCheck();
     
+      
+
   }
 
   dataSourceDataChanged(){
@@ -791,6 +790,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   private observeModel(){
     this.modelSubscription = this.model._changes.subscribe((event: GridModelEvent)=>{
       this.gridModelChanged(event);
+      this.toggleRowExpander(this.model.config.expandRowIndex);
     });
   }
 
@@ -827,6 +827,7 @@ export interface GridModelConfig {
   showExpander?: boolean,
   expanderFormatter?: Type<GridExpanderFormatter>;
   expanderTemplate?: TemplateRef<any>;
+  expandRowIndex?: number;
 }
 
 export interface GridModelStyles {
@@ -852,15 +853,16 @@ export class GridModel {
   config: GridModelConfig;
   styles: GridModelStyles;
   columns: GridColumn[] = [];
-  _changes = new Subject<GridModelEvent>();
-  //grid: GridComponent<any>;
+    _changes = new Subject<GridModelEvent>();
+  grid: GridComponent<any>;
 
-  constructor(config: GridModelConfig = {}, styles: GridModelStyles = {}){
+  constructor(config: GridModelConfig, styles: GridModelStyles = {}){        
     this.config = {
       selection: !_.isNil(config.selection) ? config.selection : false,
       showExpander: !_.isNil(config.showExpander) ? config.showExpander : false,
       expanderFormatter: !_.isNil(config.expanderFormatter) ? config.expanderFormatter : null,
-      expanderTemplate: !_.isNil(config.expanderTemplate) ? config.expanderTemplate : null
+      expanderTemplate: !_.isNil(config.expanderTemplate) ? config.expanderTemplate : null,
+      expandRowIndex: config.expandRowIndex
     };
 
     this.styles = {
@@ -871,9 +873,9 @@ export class GridModel {
     };
   }
 
-  //toggleExpander(index: number){
-  //  this.grid.toggleRowExpander(index);
-  //}
+  toggleExpander(index: number){
+    this.grid.toggleRowExpander(index);
+  }
 
   addColumn(column: GridColumn){
     column.model = this;

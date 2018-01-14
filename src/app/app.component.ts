@@ -3,6 +3,7 @@ import {GridColumn, GridComponent, GridModel} from "./modules/am-data-table/grid
 import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
 import {MatPaginator} from "@angular/material";
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,7 +11,7 @@ import {MatPaginator} from "@angular/material";
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  expandRowIndex: number;
+  
 
   gridModel: GridModel;
   data: any[] = [];
@@ -59,21 +60,20 @@ export class AppComponent implements OnInit {
     this.gridModel = new GridModel({
       showExpander: true,
       expanderTemplate: this.expanderTemplate,
+      expandRowIndex: 1,
     }, {
       minColumnWidth: "100px"
     });
-
+setTimeout(() => {
+  this.gridModel.config.expandRowIndex = 0;
+}, 20000);
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
     this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 3}));
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
-    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));
-    //test dynamic column expansion with async rest calls
-    setTimeout(() => {
-      this.expandRowIndex = 0;
-    }, 5000);
+    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));    
   }
 
   reload(){
