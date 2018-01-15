@@ -568,8 +568,8 @@ export class DataRow implements AfterContentInit {
   encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {  
-  @Output('events') events$ = new EventEmitter<GridEvent>();  
+export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
+  @Output('events') events$ = new EventEmitter<GridEvent>();
   data: any[] = [];
   @Input() model: GridModel;
 
@@ -615,9 +615,9 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   }
 
-  toggleRowExpander(index: number){    
+  toggleRowExpander(index: number){
     try {
-      this.dataRows.toArray()[index].toggleExpander();      
+      this.dataRows.toArray()[index].toggleExpander();
     } catch (error){
       console.log(error);
     }
@@ -632,7 +632,10 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     // create the columns differ to track changes to the column array
     this.columnsDiffer = this._differs.find(this.model.columns).create();
 
-    this.dataDiffer = this._differs.find([]).create();    
+    this.dataDiffer = this._differs.find([]).create();
+
+    this.model.grid = this;
+
   }
 
   ngAfterContentInit(): void {
@@ -646,29 +649,30 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this.setupHeader();
 
     this.observeModel();
-    this.observeDataSource();    
-    
+    this.observeDataSource();
   }
 
-  ngAfterContentChecked(): void {    
-    
+  ngAfterContentChecked(): void {
   }
 
-  ngAfterViewInit(): void {                
-    this.toggleRowExpander(this.model.config.expandRowIndex);    
+  ngAfterViewInit(): void {
+    //this.toggleRowExpander(this.model.config.expandRowIndex);
+    console.log("GridComponent: ngAfterViewInit");
+    //this.model.grid = this;
+
+    this.emit({
+      type: GridEventType.Initialized,
+      data: this.model
+    });
   }
 
   ngAfterViewChecked() {
-    this.toggleRowExpander(this.model.config.expandRowIndex);    
+    //this.toggleRowExpander(this.model.config.expandRowIndex);
     this._changeDetectorRef.detectChanges();
-    
-    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("GridComponent: ngOnChanges");    
-    console.log(this.model.config.expandRowIndex);
-    
+    console.log("GridComponent: ngOnChanges", this.model);
   }
 
   ngOnDestroy(): void {
@@ -698,7 +702,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     // always apply defaults (default data and header formatter if none specified)
     this.gridDefaults.applyDefaults(this.model.columns);
-    
+
     // first we do the diff to get the changes (if any)
     let changes = this.columnsDiffer.diff(this.model.columns);
 
@@ -718,11 +722,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     });
 
     // make sure that our component is checked for any other changes
-
     this._changeDetectorRef.markForCheck();
-    
-      
-
   }
 
   dataSourceDataChanged(){
@@ -730,8 +730,6 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     if (!changes) {
       return;
     }
-
-
 
     // remove
     changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
@@ -767,6 +765,15 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       data: this.data
     });
 
+    // we need to wait one tick for the rows to be rendered before trying to toggle them
+    setTimeout(()=>{
+      // we just want to do this once.  We can always call the toggleExpander manually but you would have to do it after the data has been loaded
+      if (this.model.config.expandRowIndex > -1){
+        this.toggleRowExpander(this.model.config.expandRowIndex);
+        this.model.config.expandRowIndex = -1;
+      }
+    }, 0);
+
     // then tell Angular to do it's checks
     this._changeDetectorRef.markForCheck();
   }
@@ -790,7 +797,6 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   private observeModel(){
     this.modelSubscription = this.model._changes.subscribe((event: GridModelEvent)=>{
       this.gridModelChanged(event);
-      this.toggleRowExpander(this.model.config.expandRowIndex);
     });
   }
 
@@ -812,7 +818,8 @@ export enum GridEventType {
   Reloaded,
   ColumnRemoved,
   ColumnAdded,
-  DataChange
+  DataChange,
+  Initialized
 }
 
 export interface GridEvent {
@@ -856,7 +863,7 @@ export class GridModel {
     _changes = new Subject<GridModelEvent>();
   grid: GridComponent<any>;
 
-  constructor(config: GridModelConfig, styles: GridModelStyles = {}){        
+  constructor(config: GridModelConfig, styles: GridModelStyles = {}){
     this.config = {
       selection: !_.isNil(config.selection) ? config.selection : false,
       showExpander: !_.isNil(config.showExpander) ? config.showExpander : false,

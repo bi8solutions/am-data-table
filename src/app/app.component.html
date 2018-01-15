@@ -158,7 +158,7 @@
     </div>
     <div style="background: red; display:flex; flex-direction: row;">
       <div class="mat-elevation-z1">
-        <am-data-grid #grid [model]="gridModel" [dataSource]="arrayDS">
+        <am-data-grid #grid [model]="gridModel" [dataSource]="arrayDS" (events)="gridEvent($event)">
           <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
           <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
           <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>

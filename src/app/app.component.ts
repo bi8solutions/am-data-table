@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {GridColumn, GridComponent, GridModel} from "./modules/am-data-table/grid";
+import {GridColumn, GridComponent, GridEvent, GridEventType, GridModel} from "./modules/am-data-table/grid";
 import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
 import {MatPaginator} from "@angular/material";
 
@@ -11,7 +11,7 @@ import {MatPaginator} from "@angular/material";
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  
+
 
   gridModel: GridModel;
   data: any[] = [];
@@ -36,13 +36,13 @@ export class AppComponent implements OnInit {
 
   toggleExpander(){
     console.log(this.grid);
-    this.grid.toggleRowExpander(0);
+    this.grid.toggleRowExpander(1);
   }
 
   ngOnInit(): void {
     console.log("============?> ", this.paginator);
     this.arrayDS = new ArrayDS(this.paginator);
-    
+
 
     this.peterParker = {
       firstName: "Peter", lastName: "Parker", nickName: 'Spiderman', email: "peter.parekr@marvel.com", mobile: "082444", landLine: "0215649595"
@@ -60,12 +60,13 @@ export class AppComponent implements OnInit {
     this.gridModel = new GridModel({
       showExpander: true,
       expanderTemplate: this.expanderTemplate,
-      expandRowIndex: 1,
+      expandRowIndex: 0
     }, {
       minColumnWidth: "100px"
     });
+
 setTimeout(() => {
-  this.gridModel.config.expandRowIndex = 0;
+  //this.gridModel.config.expandRowIndex = 0;
 }, 20000);
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
@@ -73,7 +74,12 @@ setTimeout(() => {
     this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 3}));
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
-    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));    
+    this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));
+
+    /*setTimeout(()=>{
+      this.grid.toggleRowExpander(1);
+    }, 0);*/
+
   }
 
   reload(){
@@ -126,5 +132,11 @@ setTimeout(() => {
 
   updateFirstName(){
     this.arrayDS.items[0].lastName = "Bla die Bla Bla Bla";
+  }
+
+  gridEvent(event: GridEvent){
+    if (event.type == GridEventType.Initialized){
+      //this.gridModel.toggleExpander(0);
+    }
   }
 }

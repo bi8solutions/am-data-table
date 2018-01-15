@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "5.0.10",
+  "version": "5.0.13",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
