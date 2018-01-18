@@ -23,6 +23,7 @@ import {
 
 import {MatAnchor, MatIconModule, MatPaginatorModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AM_GRID_DATE_DEFAULT, AM_GRID_DATE_FORMAT} from "./grid.options";
 
 @NgModule({
   imports: [
@@ -61,6 +62,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     GridPropertyFormatter,
     GridDateFormatter
   ],
-  providers: []
+  providers: [
+    { provide: AM_GRID_DATE_FORMAT, useValue: AM_GRID_DATE_DEFAULT }
+  ]
 })
 export class AmDataTableModule { }

@@ -8,7 +8,7 @@ import {
   Component,
   ComponentFactoryResolver,
   Directive,
-  ElementRef, EventEmitter, forwardRef, Inject, Injectable,
+  ElementRef, EventEmitter, forwardRef, Inject, Injectable, InjectionToken,
   Input,
   IterableChangeRecord,
   IterableChanges,
@@ -16,7 +16,7 @@ import {
   IterableDiffers,
   OnChanges,
   OnDestroy,
-  OnInit, Output,
+  OnInit, Optional, Output,
   QueryList,
   Renderer2,
   SimpleChange,
@@ -36,6 +36,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
+import {AM_GRID_DATE_FORMAT, GridDateFormat} from "./grid.options";
 
 
 
@@ -1038,8 +1039,19 @@ export class GridDateFormatter extends GridPropertyFormatter {
   @Input() column: GridColumn;
   @Input() row: RowContext;
 
+  constructor(@Optional() @Inject(AM_GRID_DATE_FORMAT) public gridDateFormat: GridDateFormat){
+    super();
+    console.log("=======================***> ", this.gridDateFormat);
+    if (!gridDateFormat){
+      console.log("DHO!!@ ", this.gridDateFormat);
+      this.gridDateFormat = {
+        format: 'fullDate'
+      }
+    }
+  }
+
   getFormat(){
-    return this.column.options.dateFormat || 'fullDate';
+    return this.column.options.dateFormat || this.gridDateFormat.format;
   }
 }
 
@@ -1072,7 +1084,7 @@ export class GridDefaults {
     },{
 
     },{
-      dateFormat: 'fullDate'
+      //dateFormat: 'fullDate'
     });
 
     let textCol = new GridColumn({type: 'text', key: 'text', formatter: GridPropertyFormatter });

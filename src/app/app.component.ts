@@ -2,16 +2,24 @@ import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {GridColumn, GridComponent, GridEvent, GridEventType, GridModel} from "./modules/am-data-table/grid";
 import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
 import {MatPaginator} from "@angular/material";
+import {AM_GRID_DATE_DEFAULT, AM_GRID_DATE_FORMAT, GridDateFormat} from "./modules/am-data-table/grid.options";
 
+
+const MY_FORMAT : GridDateFormat = {
+  format: 'MM'
+};
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [
+    { provide: AM_GRID_DATE_FORMAT, useValue: MY_FORMAT }
+  ]
+
 })
 export class AppComponent implements OnInit {
   title = 'app';
-
 
   gridModel: GridModel;
   data: any[] = [];
@@ -45,11 +53,11 @@ export class AppComponent implements OnInit {
 
 
     this.peterParker = {
-      firstName: "Peter", lastName: "Parker", nickName: 'Spiderman', email: "peter.parekr@marvel.com", mobile: "082444", landLine: "0215649595"
+      date: new Date(), firstName: "Peter", lastName: "Parker", nickName: 'Spiderman', email: "peter.parekr@marvel.com", mobile: "082444", landLine: "0215649595"
     };
 
     this.arrayDS.addItem(this.peterParker);
-    this.arrayDS.addItem({ firstName: "Bruce", lastName: "Wayne", nickName: 'Batman', email: "bruce.wayne@dc.com", mobile: "082444", landLine: "0215649595", insertedColumn: "Blaf" });
+    this.arrayDS.addItem({ date: new Date(), firstName: "Bruce", lastName: "Wayne", nickName: 'Batman', email: "bruce.wayne@dc.com", mobile: "082444", landLine: "0215649595", insertedColumn: "Blaf" });
 
     this.firstNameColumn = new GridColumn({
       key: 'firstName',
@@ -70,7 +78,9 @@ setTimeout(() => {
 }, 20000);
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
-    this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}));
+    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {}, {dateFormat: 'HH:mm'}));
+    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date', heading: 'Global Date'}));
+    this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}, {}));
     this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 3}));
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
