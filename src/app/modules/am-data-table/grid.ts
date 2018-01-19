@@ -36,9 +36,17 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
-import {AM_GRID_DATE_FORMAT, GridDateFormat} from "./grid.options";
 
+export interface GridDateFormat {
+    format: string;
+}
 
+export const AM_GRID_DATE_FORMAT =
+  new InjectionToken<GridDateFormat>('am.grid.date.format');
+
+export const AM_GRID_DATE_DEFAULT: GridDateFormat = {
+  format: 'fullDate'
+};
 
 
 //=====[ UTILS ]======================================================================================================================================

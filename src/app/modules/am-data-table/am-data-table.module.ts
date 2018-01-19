@@ -18,12 +18,11 @@ import {
   DataRowOutlet,
   RowOutlet,
   ExpanderOutlet,
-  CellOutlet
+  CellOutlet, AM_GRID_DATE_DEFAULT, AM_GRID_DATE_FORMAT
 } from "./grid";
 
 import {MatAnchor, MatIconModule, MatPaginatorModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {AM_GRID_DATE_DEFAULT, AM_GRID_DATE_FORMAT} from "./grid.options";
 
 @NgModule({
   imports: [

@@ -1,9 +1,7 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {GridColumn, GridComponent, GridEvent, GridEventType, GridModel} from "./modules/am-data-table/grid";
+import {AM_GRID_DATE_FORMAT, GridColumn, GridComponent, GridDateFormat, GridEvent, GridEventType, GridModel} from "./modules/am-data-table/grid";
 import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
 import {MatPaginator} from "@angular/material";
-import {AM_GRID_DATE_DEFAULT, AM_GRID_DATE_FORMAT, GridDateFormat} from "./modules/am-data-table/grid.options";
-
 
 const MY_FORMAT : GridDateFormat = {
   format: 'MM'
