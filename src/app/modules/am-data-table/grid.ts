@@ -236,7 +236,6 @@ export class HeaderRow implements AfterContentInit {
    * Iterate the changes and apply add/remove/insert operations to the collection of header cells (columns)
    * @todo - can still do the TODO one for moving a column (look at material2 data table sort for an example
    *
-   * @param {IterableChanges<GridColumn>} changes
    */
   applyColumnChanges(changes: IterableChanges<GridColumn>){
     if (!changes){
@@ -513,7 +512,6 @@ export class DataRow implements AfterContentInit {
    * Iterate the changes and apply add/remove/insert operations to the collection of header cells (columns)
    * @todo - can still do the TODO one for moving a column (look at material2 data table sort for an example
    *
-   * @param {IterableChanges<GridColumn>} changes
    */
   applyColumnChanges(changes: IterableChanges<GridColumn>){
     if (!changes){
@@ -633,7 +631,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   emit(event){
-    console.log(`Grid Event ${GridEventType[event.type]}:`, event);
+    //console.log(`Grid Event ${GridEventType[event.type]}:`, event);
     this.events$.emit(event);
   }
 
@@ -666,7 +664,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   ngAfterViewInit(): void {
     //this.toggleRowExpander(this.model.config.expandRowIndex);
-    console.log("GridComponent: ngAfterViewInit");
+    //console.log("GridComponent: ngAfterViewInit");
     //this.model.grid = this;
 
     this.emit({
@@ -681,7 +679,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("GridComponent: ngOnChanges", this.model);
+    //console.log("GridComponent: ngOnChanges", this.model);
   }
 
   ngOnDestroy(): void {
@@ -742,7 +740,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     // remove
     changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
-      console.log("removing existing row", record);
+      //console.log("removing existing row", record);
       this._dataRowOutlet.viewContainer.remove(record.previousIndex);
 
       this.emit({
@@ -753,7 +751,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
     // add, insert
     changes.forEachAddedItem((record: IterableChangeRecord<T>)=>{
-      console.log("adding/inserting new row", record);
+      //console.log("adding/inserting new row", record);
       let rowContext: RowContext = {
         data: record.item,
         model: this.model,
@@ -1049,9 +1047,9 @@ export class GridDateFormatter extends GridPropertyFormatter {
 
   constructor(@Optional() @Inject(AM_GRID_DATE_FORMAT) public gridDateFormat: GridDateFormat){
     super();
-    console.log("=======================***> ", this.gridDateFormat);
+    //console.log("=======================***> ", this.gridDateFormat);
     if (!gridDateFormat){
-      console.log("DHO!!@ ", this.gridDateFormat);
+      //console.log("DHO!!@ ", this.gridDateFormat);
       this.gridDateFormat = {
         format: 'fullDate'
       }
