@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js publish:local
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js list lodash
 
 PATH: 
   /Users/manie/google-cloud-sdk/bin:/Users/manie/.sdkman/candidates/springboot/current/bin:/Users/manie/.sdkman/candidates/gradle/current/bin:/Users/manie/.npm-global/bin:/Users/manie/jstuff/apache-maven-3.5.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin:/usr/local/sbin
@@ -16,7 +16,7 @@ Platform:
 npm manifest: 
   {
     "name": "@bi8/am-data-table",
-    "version": "5.2.0",
+    "version": "5.2.1",
     "license": "MIT",
     "scripts": {
       "ng": "ng",
@@ -26,11 +26,11 @@ npm manifest:
       "test": "ng test",
       "lint": "ng lint",
       "e2e": "ng e2e",
-      "package": "ng-packagr",
+      "package": "DEBUG=true ng-packagr",
       "install:local": "yalc add @bi8/am-logger && yalc add @bi8/am-storage",
       "publish:local": "yarn run package && cd dist && yalc publish",
       "publish:remote": "",
-      "run:serve": "ng serve --ssl --proxy-config proxy-conf.json --port 8000"
+      "run:serve": "ng serve --ssl --port 8000"
     },
     "private": false,
     "repository": {
@@ -7774,17 +7774,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.21.tgz#8c0e8e361bd326ee1474e4f96e17d5ef99bec4b2"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 1
-  Command: sh
-  Arguments: -c yarn run package && cd dist && yalc publish
-  Directory: /Users/manie/dev/bi8/am-data-table
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:30281:17)
-      at emitTwo (events.js:125:13)
-      at ChildProcess.emit (events.js:213:7)
-      at maybeClose (internal/child_process.js:897:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:208:5)
+  Error: Package "" refers to a non-existing file '"/Users/manie/dev/bi8/am-data-table/.yalc/@bi8/am-storage/.yalc/@bi8/am-logger"'.
+      at new MessageError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:186:110)
+      at FileResolver.<anonymous> (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:51140:15)
+      at Generator.next (<anonymous>)
+      at step (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:98:30)
+      at /usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:109:13
+      at <anonymous>

@@ -7,6 +7,8 @@
     "entryFile": "src/public_api.ts",
     "umdModuleIds": {
       "lodash": "_",
+      "@angular/material": "ng.material",
+      "@angular/flex-layout" : "ng.flex-layout",
       "@bi8/am-logger": "am-logger",
       "@bi8/am-storage": "am-storage"
     }
