@@ -36,6 +36,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
+import {Observable} from "../../../../node_modules/rxjs";
 
 export interface GridDateFormat {
     format: string;
@@ -392,6 +393,9 @@ export class DataCell implements OnInit, AfterContentInit {
 const EXPANDER_ICON_CLOSED = 'keyboard_arrow_right';
 const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
 
+export interface DataRowStyleResolver {
+  (row: RowContext): string[];
+}
 
 @Component({
   selector: 'data-row',
@@ -450,11 +454,11 @@ const EXPANDER_ICON_OPEN = 'keyboard_arrow_down';
     \                                                                   \
     \                                                                   \
     \                                                                   \
-    =====================================================================    
+    =====================================================================
     -->    
     
-    <div style="flex: 1 1 auto;">
-      <div style="display: flex; flex: 1 1 auto;" [ngClass]="{'am-expanded-row': row.expanded}">
+    <div style="flex: 1 1 auto;" [ngClass]="rowClass()">
+      <div style="display: flex; flex: 1 1 auto;" [ngClass]="{'am-expanded-row': row.expanded && !rowClass()}">
         <div *ngIf="row.model.config.showExpander" class="am-header-expander-column">
           <mat-icon (click)="toggleExpander()">{{expanderIcon}}</mat-icon>
         </div>
@@ -489,6 +493,14 @@ export class DataRow implements AfterContentInit {
   expanderIcon: string = EXPANDER_ICON_CLOSED;
 
   constructor(protected _changeDetectorRef: ChangeDetectorRef){
+  }
+
+  rowClass(){
+    if (this.row.model.styles.dataRowStyleResolver){
+      return this.row.model.styles.dataRowStyleResolver(this.row);
+    } else {
+      return null;
+    }
   }
 
   ngAfterContentInit(): void {
@@ -848,7 +860,8 @@ export interface GridModelStyles {
   containerClasses?: string[],
   gridClasses?: string[],
   scrollX?: boolean,
-  minColumnWidth?: string
+  minColumnWidth?: string,
+  dataRowStyleResolver?: DataRowStyleResolver
 }
 
 export enum GridModelEventType {
@@ -883,7 +896,8 @@ export class GridModel {
       containerClasses: !_.isNil(styles.containerClasses) ?  styles.containerClasses : [],
       gridClasses: !_.isNil(styles.containerClasses) ? styles.containerClasses : [],
       scrollX: !_.isNil(styles.scrollX) ? styles.scrollX : false,
-      minColumnWidth: !_.isNil(styles.minColumnWidth) ? styles.minColumnWidth : null
+      minColumnWidth: !_.isNil(styles.minColumnWidth) ? styles.minColumnWidth : null,
+      dataRowStyleResolver: styles.dataRowStyleResolver || null
     };
   }
 
@@ -922,6 +936,10 @@ export class GridModel {
       return column.config.key == key;
     });
     this.notifyChanges(GridModelEventType.REMOVE);
+  }
+
+  updateStyles(){
+    this.notifyChanges(GridModelEventType.UPDATE, null);
   }
 
   updateColumn(column: GridColumn){

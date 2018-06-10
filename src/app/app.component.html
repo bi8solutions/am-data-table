@@ -43,100 +43,11 @@
     </div>
   </div>
 
-
-
   <hr/>
-
-
-  <!-- Maybe look at creating a component that will scroll it's content -->
-
-  <!--<md-card>
-    <div class="test-grid-container">
-      <div class="test-grid">
-        <div class="test-grid-wrapper">
-          <div class="test-grid-inner-wrapper">
-            <div class="test-header-row">
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell double">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-              <div class="test-cell">I am a Header Cell</div>
-            </div>
-            <div class="test-data-row">
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell double">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-            </div>
-            <div class="test-data-row">
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell double">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-              <div class="test-cell">I am a Data Cell that has more information than the heder cell</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <md-paginator #paginator
-                  [length]="arrayDS.totalSize"
-                  [pageIndex]="arrayDS.pageIndex"
-                  [pageSize]="arrayDS.pageSize"
-                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
-
-
-    <am-selector #selector
-                 [template]="displayTemplate"
-                 [provider]="pageSelectionProvider" -> The provider will listen for grid events
-                 [pageSize]="arrayDS.pageSize"
-                 [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
-  </md-card>-->
-
-
-
-  <!--
-  Ok, so what do I want to do?
-
-  I want to have a selection that I give some kind of provider to store it in.  The selection could potentially
-  be stored in the back-end or it can be stored in the front end (memory or local storage)
-
-  I could be that I only want to save the keys instead of the complete object - so only the jeys are stored,
-  not the whole value.
-
-  Have a total size and a selection size
-
-  It could be persistent meaning that when I page between lists, the selection is maintained (potentially in memory)
-
-
-  I must be able to select / clear selections for the current page
-  I must be able to select / clear selections for the total list
-  I must be able to display a selection string (label - using a template if the default message are not acceptable)
-  I must get an event when there are a selection change (add, remove)
-
-  Have a checkbox field
-  When selecting, then get the selection provider and click set/unset
-
-
-
-
-
-
-  -->
-
 
   <mat-card>
     <button (click)="reload()">Reload</button>
+    <button (click)="tickle()">Color stuff</button>
 
     <button (click)="addColumn()">Add Column</button>
     <button (click)="insertColumn(1)">Insert Column (1)</button>
@@ -181,27 +92,3 @@
   </div>
 </div>
 
-
-<!--
-<div>
-  <h2>Home</h2>
-
-  <md-card>
-  <button md-button (click)="addColumn()">Add Last Name</button>
-  <button md-button (click)="removeColumn()">Remove Column</button>
-  <button md-button (click)="addRow()">Add Row</button>
-  </md-card>
-
-  <div class="mat-elevation-z1">
-    <am-data-grid [model]="model" [dataSource]="db.dataSource" [expandRowIndex]="0">
-      <ng-template #addressFormatter let-row="row">Goodbye Cruel World :( {{row.address}} {{duff}}</ng-template>
-      <ng-template #myTemplate>Goodbye Cruel World :) :) {{duff}}</ng-template>
-    </am-data-grid>
-
-    <md-paginator #paginator
-                  [length]="db.totalSize"
-                  [pageIndex]="db.pageIndex"
-                  [pageSize]="db.pageSize"
-                  [pageSizeOptions]="[5, 10, 15, 20, 35, 50]"></md-paginator>
-  </div>
-</div>-->

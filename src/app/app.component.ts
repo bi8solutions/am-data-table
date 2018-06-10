@@ -1,5 +1,14 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {AM_GRID_DATE_FORMAT, GridColumn, GridComponent, GridDateFormat, GridEvent, GridEventType, GridModel} from "./modules/am-data-table/grid";
+import {
+  AM_GRID_DATE_FORMAT, DataRowStyleResolver,
+  GridColumn,
+  GridComponent,
+  GridDateFormat,
+  GridEvent,
+  GridEventType,
+  GridModel,
+  RowContext
+} from "./modules/am-data-table/grid";
 import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
 import {MatPaginator} from "@angular/material";
 
@@ -71,6 +80,18 @@ export class AppComponent implements OnInit {
       minColumnWidth: "100px"
     });
 
+    /*let example: DataRowStyleResolver = (row: RowContext) => {
+      return ['pink'];
+    }*/
+
+    /*
+    (row: RowContext)=> {
+
+            let bla = ['pink'];
+            return bla;
+          }
+     */
+
 setTimeout(() => {
   //this.gridModel.config.expandRowIndex = 0;
 }, 20000);
@@ -92,6 +113,12 @@ setTimeout(() => {
 
   reload(){
     this.arrayDS.reload();
+  }
+
+  tickle(){
+    console.log("===>", this.arrayDS.items[1].email);
+    this.arrayDS.items[1].email = 'duff';
+    //this.gridModel.updateStyles();
   }
 
   addColumn(){
