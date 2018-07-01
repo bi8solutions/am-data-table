@@ -70,6 +70,8 @@ export class AppComponent implements OnInit {
       key: 'firstName',
       headingTemplate: this.firstNameHeaderTemplate,
       dataTemplate: this.firstNameDataTemplate
+    }, {
+
     });
 
     this.gridModel = new GridModel({
@@ -97,10 +99,19 @@ setTimeout(() => {
 }, 20000);
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
-    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {}, {dateFormat: 'HH:mm'}));
+    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {
+      }, {dateFormat: 'HH:mm'}));
     this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date', heading: 'Global Date'}));
     this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}, {}));
-    this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {flex: 3}));
+    this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {
+      flex: 3,
+      dataCellStyleResolver: ((row: RowContext, column: GridColumn) =>{
+        const styleNames: string[] = [];
+        styleNames.push("red-dead-redemption");
+        return styleNames;
+
+      })
+    }));
     this.gridModel.addColumn(new GridColumn({key: 'email'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'mobile'}, {flex: 1}));
     this.gridModel.addColumn(new GridColumn({key: 'landLine'}, {flex: 3}));

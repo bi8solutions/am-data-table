@@ -397,6 +397,10 @@ export interface DataRowStyleResolver {
   (row: RowContext): string[];
 }
 
+export interface DataCellStyleResolver {
+  (row: RowContext, column: GridColumn): string[];
+}
+
 @Component({
   selector: 'data-row',
   inputs: ['row: row'],
@@ -469,7 +473,7 @@ export interface DataRowStyleResolver {
       </div>
     </div>
     <ng-container>
-      <data-cell *dataCellDef="let column; " [column]="column" [row]="row"></data-cell>
+      <data-cell *dataCellDef="let column; " [column]="column" [row]="row" [ngClass]="cellClass(column)"></data-cell>
     </ng-container>
   `,
   host: {
@@ -498,6 +502,14 @@ export class DataRow implements AfterContentInit {
   rowClass(){
     if (this.row.model.styles.dataRowStyleResolver){
       return this.row.model.styles.dataRowStyleResolver(this.row);
+    } else {
+      return null;
+    }
+  }
+
+  cellClass(column: GridColumn){
+    if (column.styles.dataCellStyleResolver){
+      return column.styles.dataCellStyleResolver(this.row, column);
     } else {
       return null;
     }
@@ -987,6 +999,7 @@ export interface GridColumnStyle {
   flex?: number;
   minWidth?: string;
   maxWidth?: string;
+  dataCellStyleResolver?: DataCellStyleResolver
 }
 
 export class GridColumn {
@@ -1016,7 +1029,8 @@ export class GridColumn {
       dataCellStyleClasses: !_.isNil(styles.dataCellStyleClasses) ? styles.dataCellStyleClasses : [],
       flex: !_.isNil(styles.flex) ? styles.flex : 1,
       minWidth: !_.isNil(styles.minWidth) ? styles.minWidth : null,
-      maxWidth: !_.isNil(styles.maxWidth) ? styles.maxWidth : null
+      maxWidth: !_.isNil(styles.maxWidth) ? styles.maxWidth : null,
+      dataCellStyleResolver: styles.dataCellStyleResolver || null
     };
 
     if (!this.config.heading && !this.config.noHeading){
