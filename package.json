@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -34,8 +34,6 @@
     "@angular/platform-browser": "~5.2.0",
     "@angular/platform-browser-dynamic": "~5.2.0",
     "@angular/router": "~5.2.0",
-    "@bi8/am-logger": "^5.2.0",
-    "@bi8/am-storage": "^5.2.0",
     "core-js": "^2.4.1",
     "lodash": "^4.17.4",
     "material-design-icons": "~3.0.1",
