@@ -299,6 +299,9 @@ export interface RowContext {
 
   // if the detail expander is shown or not
   expanded?: boolean;
+
+  // if the row is selected
+  selected?: boolean
 }
 
 @Directive({selector: '[dataRowDef]',})
@@ -461,7 +464,7 @@ export interface DataCellStyleResolver {
     =====================================================================
     -->    
     
-    <div style="flex: 1 1 auto;" [ngClass]="rowClass()">
+    <div style="flex: 1 1 auto; cursor: pointer;" [ngClass]="rowClass()" (click)="rowClicked($event)">
       <div style="display: flex; flex: 1 1 auto;" [ngClass]="{'am-expanded-row': row.expanded && !rowClass()}">
         <div *ngIf="row.model.config.showExpander" class="am-header-expander-column">
           <mat-icon (click)="toggleExpander()">{{expanderIcon}}</mat-icon>
@@ -492,18 +495,37 @@ export class DataRow implements AfterContentInit {
   @ViewChildren(DataCell) dataCells : QueryList<DataCell>;
   @ViewChild(ExpanderOutlet) _expanderOutlet: ExpanderOutlet;
 
+  selected: boolean = false;
   row: RowContext;
-
   expanderIcon: string = EXPANDER_ICON_CLOSED;
 
   constructor(protected _changeDetectorRef: ChangeDetectorRef){
+  }
+
+  rowClicked(event: any){
+    this.events$.emit({
+      type: GridEventType.RowClicked,
+      data: this
+    });
+  }
+
+  selectRow(){
+    this.row.selected = true;
+  }
+
+  deselectRow(){
+    this.row.selected = false;
+  }
+
+  isSelected() : boolean {
+    return this.row.selected;
   }
 
   rowClass(){
     if (this.row.model.styles.dataRowStyleResolver){
       return this.row.model.styles.dataRowStyleResolver(this.row);
     } else {
-      return null;
+      return this.row.selected ? ["default-selected-row"] : null;
     }
   }
 
@@ -560,7 +582,6 @@ export class DataRow implements AfterContentInit {
 
   toggleExpander(){
     this._expanderOutlet.viewContainer.clear();
-
 
     if (this.row.expanded){
       this.row.expanded = false;
@@ -654,7 +675,32 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     }
   }
 
-  emit(event){
+  emit(event: GridEvent){
+    if (event.type == GridEventType.RowClicked){
+      this.events$.emit(event);
+
+      let clickedDataRow = event.data as DataRow;
+
+      this.dataRows.forEach((dataRow: DataRow)=>{
+        if (dataRow.isSelected()){
+          // first we deselect it
+          dataRow.deselectRow();
+
+          // then we notify
+          this.events$.emit({
+            type: GridEventType.RowDeselected,
+            data: dataRow.row
+          });
+        }
+      });
+
+      clickedDataRow.selectRow();
+      this.events$.emit({
+        type: GridEventType.RowSelected,
+        data: clickedDataRow
+      });
+    }
+
     //console.log(`Grid Event ${GridEventType[event.type]}:`, event);
     this.events$.emit(event);
   }
@@ -850,7 +896,10 @@ export enum GridEventType {
   ColumnRemoved,
   ColumnAdded,
   DataChange,
-  Initialized
+  Initialized,
+  RowClicked,
+  RowSelected,
+  RowDeselected
 }
 
 export interface GridEvent {

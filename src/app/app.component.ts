@@ -94,9 +94,10 @@ export class AppComponent implements OnInit {
           }
      */
 
-setTimeout(() => {
-  //this.gridModel.config.expandRowIndex = 0;
-}, 20000);
+    setTimeout(() => {
+        //this.gridModel.config.expandRowIndex = 0;
+    }, 20000);
+
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
     this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {
@@ -181,6 +182,8 @@ setTimeout(() => {
   }
 
   gridEvent(event: GridEvent){
+    //console.log("======================================>GRIDEVENT: ", event);
+
     if (event.type == GridEventType.Initialized){
       //this.gridModel.toggleExpander(0);
     }

@@ -1,6 +1,6 @@
 {
   "name": "@bi8/am-data-table",
-  "version": "5.2.4",
+  "version": "5.2.5",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -13,7 +13,7 @@
     "package": "DEBUG=true ng-packagr",
     "install:local": "yalc add @bi8/am-logger && yalc add @bi8/am-storage",
     "publish:local": "yarn run package && cd dist && yalc publish",
-    "run:serve": "ng serve --ssl --port 8000"
+    "serve": "ng serve --ssl --port 8002"
   },
   "private": false,
   "repository": {

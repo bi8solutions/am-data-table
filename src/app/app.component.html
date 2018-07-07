@@ -72,10 +72,10 @@
         <am-data-grid #grid [model]="gridModel" [dataSource]="arrayDS" (events)="gridEvent($event)">
           <ng-template #firstNameHeaderTemplate let-column="column"> (: First Name  - {{column.config.key}} :) </ng-template>
           <ng-template #alternativeFirstNameHeaderTemplate let-column="column"> Skuus, Pasop, Vockoff {{column.config.key}}</ng-template>
-          <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{message}} - {{row.data.insertedColumn}}</ng-template>
+          <ng-template #firstNameDataTemplate let-column="column" let-row="row">{{row.data.firstName}} - {{ row.selected }}- {{message}} - {{row.data.insertedColumn}}</ng-template>
 
           <ng-template #expanderTemplate let-row="row">
-            Hello World
+            {{row.selected}} - Hello World
           </ng-template>
         </am-data-grid>
 

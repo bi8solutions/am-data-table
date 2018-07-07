@@ -1,6 +1,8 @@
 
 
-
+.default-selected-row {
+  background-color: #bcbcbc;
+}
 
 
 .container {
@@ -154,7 +156,7 @@
   align-items: center;
   display: flex;
   //height: 24px;
-  
+
   //background: gainsboro;
 }
 
@@ -190,7 +192,7 @@
   //padding: 0 5px;
   border-bottom-color: rgba(0,0,0,.12);
   background-color: #fafafa;
-  
+
 }
 
 .am-data-cell {
