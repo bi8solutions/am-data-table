@@ -680,25 +680,32 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
       this.events$.emit(event);
 
       let clickedDataRow = event.data as DataRow;
+      let isCurrentselected = false;
 
       this.dataRows.forEach((dataRow: DataRow)=>{
         if (dataRow.isSelected()){
+          if (dataRow == clickedDataRow){
+            isCurrentselected = true;
+          }
+
           // first we deselect it
           dataRow.deselectRow();
 
           // then we notify
           this.events$.emit({
             type: GridEventType.RowDeselected,
-            data: dataRow.row
+            data: dataRow
           });
         }
       });
 
-      clickedDataRow.selectRow();
-      this.events$.emit({
-        type: GridEventType.RowSelected,
-        data: clickedDataRow
-      });
+      if (!isCurrentselected){
+        clickedDataRow.selectRow();
+        this.events$.emit({
+          type: GridEventType.RowSelected,
+          data: clickedDataRow
+        });
+      }
     }
 
     //console.log(`Grid Event ${GridEventType[event.type]}:`, event);

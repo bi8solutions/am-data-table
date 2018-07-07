@@ -182,7 +182,7 @@ export class AppComponent implements OnInit {
   }
 
   gridEvent(event: GridEvent){
-    //console.log("======================================>GRIDEVENT: ", event);
+    //console.log("======================================> GRID EVENT: ", event);
 
     if (event.type == GridEventType.Initialized){
       //this.gridModel.toggleExpander(0);
