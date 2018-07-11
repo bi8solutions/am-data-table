@@ -1,7 +1,8 @@
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {MatPaginator} from "@angular/material";
 import {DataSource} from "@angular/cdk/collections";
-import { Observable } from 'rxjs';
+import {Observable} from "rxjs/Observable";
+import 'rxjs/Rx';
 
 export enum Operation {
   gt,     // > Greater Than

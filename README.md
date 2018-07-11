@@ -1,5 +1,21 @@
 # Angular Material Data Table
 
+ng update @angular/cli --migrate-only --from=1.7.4
+ng update @angular/core
+yarn add ng-packagr
+yarn add @angular/material
+yarn add core-js
+yarn add @angular/flex-layout
+yarn add lodash
+yarn add material-design-icons
+yarn add roboto-fontface
+yarn add zone.js
+yarn add ts-node
+yarn add tsickle
+yarn add tslib
+yarn add @angular/compiler-cli
+yarn add rxjs-compat
+
 AmDataTable is a simple library used to display tabular data  
 
 Please note that this is a *Proof of Concept* library and not meant for production use and that the API can 

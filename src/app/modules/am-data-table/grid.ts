@@ -36,7 +36,6 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 import * as _ from 'lodash';
 import {takeUntil} from "rxjs/operator/takeUntil";
-import {Observable} from "../../../../node_modules/rxjs";
 
 export interface GridDateFormat {
     format: string;
