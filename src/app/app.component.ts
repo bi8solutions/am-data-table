@@ -8,11 +8,11 @@ import {
   GridEventType,
   GridModel,
   RowContext
-} from "./modules/am-data-table/grid";
-import {ArrayDS} from "./modules/am-data-table/grid-array.ds";
-import {MatPaginator} from "@angular/material";
+} from './modules/am-data-table/grid';
+import {ArrayDS} from './modules/am-data-table/grid-array.ds';
+import {MatPaginator} from '@angular/material';
 
-const MY_FORMAT : GridDateFormat = {
+const MY_FORMAT: GridDateFormat = {
   format: 'MM'
 };
 
@@ -21,7 +21,7 @@ const MY_FORMAT : GridDateFormat = {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   providers: [
-    { provide: AM_GRID_DATE_FORMAT, useValue: MY_FORMAT }
+    {provide: AM_GRID_DATE_FORMAT, useValue: MY_FORMAT}
   ]
 
 })
@@ -31,55 +31,68 @@ export class AppComponent implements OnInit {
   gridModel: GridModel;
   data: any[] = [];
 
-  arrayDS : ArrayDS;
+  arrayDS: ArrayDS;
   message: string = 'Hello World';
 
-  @ViewChild("firstNameHeaderTemplate") private firstNameHeaderTemplate: TemplateRef<any>;
-  @ViewChild("alternateFirstNameNameHeaderTemplate") private alternateFirstNameTemplate: TemplateRef<any>;
-  @ViewChild("firstNameDataTemplate") private firstNameDataTemplate: TemplateRef<any>;
-  @ViewChild("expanderTemplate") private expanderTemplate: TemplateRef<any>;
+  @ViewChild('firstNameHeaderTemplate', {static: true}) private firstNameHeaderTemplate: TemplateRef<any>;
+  @ViewChild('alternateFirstNameNameHeaderTemplate', {static: true}) private alternateFirstNameTemplate: TemplateRef<any>;
+  @ViewChild('firstNameDataTemplate', {static: true}) private firstNameDataTemplate: TemplateRef<any>;
+  @ViewChild('expanderTemplate', {static: true}) private expanderTemplate: TemplateRef<any>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   firstNameColumn: GridColumn;
   peterParker: any;
 
-  @ViewChild("grid") private grid: GridComponent<any>;
+  @ViewChild('grid', {static: true}) private grid: GridComponent<any>;
 
   constructor() {
   }
 
-  toggleExpander(){
+  toggleExpander() {
     console.log(this.grid);
     this.grid.toggleRowExpander(1);
   }
 
   ngOnInit(): void {
-    console.log("============?> ", this.paginator);
+    console.log('============?> ', this.paginator);
     this.arrayDS = new ArrayDS(this.paginator);
 
 
     this.peterParker = {
-      date: new Date(), firstName: "Peter", lastName: "Parker", nickName: 'Spiderman', email: "peter.parekr@marvel.com", mobile: "082444", landLine: "0215649595"
+      date: new Date(),
+      firstName: 'Peter',
+      lastName: 'Parker',
+      nickName: 'Spiderman',
+      email: 'peter.parekr@marvel.com',
+      mobile: '082444',
+      landLine: '0215649595'
     };
 
     this.arrayDS.addItem(this.peterParker);
-    this.arrayDS.addItem({ date: new Date(), firstName: "Bruce", lastName: "Wayne", nickName: 'Batman', email: "bruce.wayne@dc.com", mobile: "082444", landLine: "0215649595", insertedColumn: "Blaf" });
+    this.arrayDS.addItem({
+      date: new Date(),
+      firstName: 'Bruce',
+      lastName: 'Wayne',
+      nickName: 'Batman',
+      email: 'bruce.wayne@dc.com',
+      mobile: '082444',
+      landLine: '0215649595',
+      insertedColumn: 'Blaf'
+    });
 
     this.firstNameColumn = new GridColumn({
       key: 'firstName',
       headingTemplate: this.firstNameHeaderTemplate,
       dataTemplate: this.firstNameDataTemplate
-    }, {
-
-    });
+    }, {});
 
     this.gridModel = new GridModel({
       showExpander: true,
       expanderTemplate: this.expanderTemplate,
       expandRowIndex: 0
     }, {
-      minColumnWidth: "100px"
+      minColumnWidth: '100px'
     });
 
     /*let example: DataRowStyleResolver = (row: RowContext) => {
@@ -95,20 +108,19 @@ export class AppComponent implements OnInit {
      */
 
     setTimeout(() => {
-        //this.gridModel.config.expandRowIndex = 0;
+      //this.gridModel.config.expandRowIndex = 0;
     }, 20000);
 
     this.firstNameColumn.styles.headerCellStyleClasses = ['some-class'];
     this.gridModel.addColumn(this.firstNameColumn);
-    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {
-      }, {dateFormat: 'HH:mm'}));
+    this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date'}, {}, {dateFormat: 'HH:mm'}));
     this.gridModel.addColumn(new GridColumn({key: 'date', type: 'date', heading: 'Global Date'}));
     this.gridModel.addColumn(new GridColumn({key: 'lastName'}, {flex: 1}, {}));
     this.gridModel.addColumn(new GridColumn({key: 'nickName'}, {
       flex: 3,
-      dataCellStyleResolver: ((row: RowContext, column: GridColumn) =>{
+      dataCellStyleResolver: ((row: RowContext, column: GridColumn) => {
         const styleNames: string[] = [];
-        styleNames.push("red-dead-redemption");
+        styleNames.push('red-dead-redemption');
         return styleNames;
 
       })
@@ -123,22 +135,22 @@ export class AppComponent implements OnInit {
 
   }
 
-  reload(){
+  reload() {
     this.arrayDS.reload();
   }
 
-  tickle(){
-    console.log("===>", this.arrayDS.items[1].email);
+  tickle() {
+    console.log('===>', this.arrayDS.items[1].email);
     this.arrayDS.items[1].email = 'duff';
     //this.gridModel.updateStyles();
   }
 
-  addColumn(){
+  addColumn() {
     this.gridModel.addColumn(new GridColumn({key: 'anotherFirstNameColumn', headingTemplate: this.firstNameHeaderTemplate}));
     //this.gridModel.addColumn(new GridColumn({key: 'anotherFirstNameColumn'}));
   }
 
-  insertColumn(index: number){
+  insertColumn(index: number) {
     this.firstNameColumn.config.headingTemplate = this.alternateFirstNameTemplate;
     this.gridModel.updateColumn(this.firstNameColumn);
 
@@ -146,45 +158,45 @@ export class AppComponent implements OnInit {
     this.gridModel.insertColumn(new GridColumn({key: `insertedColumn`}), index);
   }
 
-  removeColumn(index: number){
+  removeColumn(index: number) {
     this.gridModel.removeColumnByIndex(index);
   }
 
-  addRow(){
+  addRow() {
     this.arrayDS.addItem({
-      firstName: "Manie",
-      lastName: "Coetzee",
+      firstName: 'Manie',
+      lastName: 'Coetzee',
       nickName: 'Blaf',
-      email: "mc@bla.bla.xom",
-      mobile: "082444",
-      landLine: "0215649595",
-      anotherFirstNameColumn: "Blaf"
+      email: 'mc@bla.bla.xom',
+      mobile: '082444',
+      landLine: '0215649595',
+      anotherFirstNameColumn: 'Blaf'
     })
   }
 
-  insertRow(index: number){
+  insertRow(index: number) {
     this.arrayDS.insertItem({
-      firstName: "Manie",
-      lastName: "Coetzee",
+      firstName: 'Manie',
+      lastName: 'Coetzee',
       nickName: 'Blaf',
-      email: "mc@bla.bla.xom",
-      mobile: "082444",
-      landline: "021"
+      email: 'mc@bla.bla.xom',
+      mobile: '082444',
+      landline: '021'
     }, index);
   }
 
-  removeRow(index: number){
+  removeRow(index: number) {
     this.arrayDS.removeItemByIndex(index);
   }
 
-  updateFirstName(){
-    this.arrayDS.items[0].lastName = "Bla die Bla Bla Bla";
+  updateFirstName() {
+    this.arrayDS.items[0].lastName = 'Bla die Bla Bla Bla';
   }
 
-  gridEvent(event: GridEvent){
+  gridEvent(event: GridEvent) {
     //console.log("======================================> GRID EVENT: ", event);
 
-    if (event.type == GridEventType.Initialized){
+    if (event.type == GridEventType.Initialized) {
       //this.gridModel.toggleExpander(0);
     }
   }

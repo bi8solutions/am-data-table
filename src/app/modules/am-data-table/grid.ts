@@ -27,18 +27,18 @@ import {
   ViewChildren,
   ViewContainerRef,
   ViewEncapsulation
-} from "@angular/core";
+} from '@angular/core';
 
-import {Subject} from "rxjs/Subject";
-import {Subscription} from "rxjs/Subscription";
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Subject} from 'rxjs/Subject';
+import {Subscription} from 'rxjs/Subscription';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import * as _ from 'lodash';
-import {takeUntil} from "rxjs/operator/takeUntil";
+import {takeUntil} from 'rxjs/operator/takeUntil';
 
 export interface GridDateFormat {
-    format: string;
+  format: string;
 }
 
 export const AM_GRID_DATE_FORMAT =
@@ -51,7 +51,7 @@ export const AM_GRID_DATE_DEFAULT: GridDateFormat = {
 
 //=====[ UTILS ]======================================================================================================================================
 
-function toCssFriendly(value: string) : string {
+function toCssFriendly(value: string): string {
   // the string value is typically generated from the column key that may contain '.'
   return value ? value.split('.').map(item => _.kebabCase(item)).join('-') : value;
 }
@@ -59,28 +59,33 @@ function toCssFriendly(value: string) : string {
 //=====[ OUTLETS ]====================================================================================================================================
 
 @Directive({selector: '[headerRowOutlet]'})
-export class HeaderRowOutlet  {
-  constructor(public viewContainer: ViewContainerRef){}
+export class HeaderRowOutlet {
+  constructor(public viewContainer: ViewContainerRef) {
+  }
 }
 
 @Directive({selector: '[dataRowOutlet]'})
-export class DataRowOutlet  {
-  constructor(public viewContainer: ViewContainerRef){}
+export class DataRowOutlet {
+  constructor(public viewContainer: ViewContainerRef) {
+  }
 }
 
 @Directive({selector: '[rowOutlet]'})
-export class RowOutlet  {
-  constructor(public viewContainer: ViewContainerRef){}
+export class RowOutlet {
+  constructor(public viewContainer: ViewContainerRef) {
+  }
 }
 
 @Directive({selector: '[expanderOutlet]'})
-export class ExpanderOutlet  {
-  constructor(public viewContainer: ViewContainerRef){}
+export class ExpanderOutlet {
+  constructor(public viewContainer: ViewContainerRef) {
+  }
 }
 
 @Directive({selector: '[cellOutlet]'})
-export class CellOutlet  {
-  constructor(public viewContainer: ViewContainerRef){}
+export class CellOutlet {
+  constructor(public viewContainer: ViewContainerRef) {
+  }
 }
 
 //=====[ HEADER ROW ]=================================================================================================================================
@@ -92,7 +97,7 @@ export class CellOutlet  {
 export class HeaderRowDef {
   model: GridModel;
 
-  constructor(public templateRef: TemplateRef<any>, public viewContainer: ViewContainerRef){
+  constructor(public templateRef: TemplateRef<any>, public viewContainer: ViewContainerRef) {
   }
 }
 
@@ -102,8 +107,9 @@ export class HeaderRowDef {
 })
 export class HeaderCellDef {
   column: GridColumn;
+
   constructor(public templateRef: TemplateRef<any>,
-              public viewContainer: ViewContainerRef){
+              public viewContainer: ViewContainerRef) {
   }
 }
 
@@ -120,29 +126,29 @@ export class HeaderCellDef {
   encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChanges {
+export class HeaderCell implements OnInit, OnDestroy, AfterContentInit, OnChanges {
 
   column: GridColumn;
-  @ViewChild(CellOutlet) _cellOutlet: CellOutlet;
+  @ViewChild(CellOutlet, {static: false}) _cellOutlet: CellOutlet;
 
   constructor(protected componentFactoryResolver: ComponentFactoryResolver,
               protected elementRef: ElementRef,
-              protected renderer: Renderer2){
+              protected renderer: Renderer2) {
   }
 
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-header-cell-${toCssFriendly(this.column.config.key)}`);
     this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
 
-    if (this.column.styles.minWidth){
+    if (this.column.styles.minWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
 
-    } else if (this.column.model.styles.minColumnWidth){
+    } else if (this.column.model.styles.minColumnWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
     }
 
-    if (this.column.styles.headerCellStyleClasses){
-      this.column.styles.headerCellStyleClasses.forEach((cls, index)=>{
+    if (this.column.styles.headerCellStyleClasses) {
+      this.column.styles.headerCellStyleClasses.forEach((cls, index) => {
         this.renderer.addClass(this.elementRef.nativeElement, cls);
       });
     }
@@ -158,15 +164,15 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit,  OnChang
     this.renderCell();
   }
 
-  renderCell(){
+  renderCell() {
     this._cellOutlet.viewContainer.clear();
 
-    if (this.column.config.headingTemplate){
+    if (this.column.config.headingTemplate) {
       this._cellOutlet.viewContainer.createEmbeddedView(this.column.config.headingTemplate, {column: this.column});
 
     } else {
       let formatter: Type<GridHeaderFormatter> = this.column.config.headingFormatter;
-      if (formatter){
+      if (formatter) {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(formatter);
 
         let viewContainerRef = this._cellOutlet.viewContainer;
@@ -205,13 +211,13 @@ export class HeaderRow implements AfterContentInit {
 
   @Output('events') events$ = new EventEmitter<GridEvent>();
 
-  @ViewChild(RowOutlet) _rowOutlet: RowOutlet;
-  @ViewChild(HeaderCellDef) _headerCellDef: HeaderCellDef;
-  @ViewChildren(HeaderCell) headerCells : QueryList<HeaderCell>;
+  @ViewChild(RowOutlet, {static: true}) _rowOutlet: RowOutlet;
+  @ViewChild(HeaderCellDef, {static: true}) _headerCellDef: HeaderCellDef;
+  @ViewChildren(HeaderCell) headerCells: QueryList<HeaderCell>;
 
   model: GridModel;
 
-  constructor(protected _changeDetectorRef: ChangeDetectorRef){
+  constructor(protected _changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngAfterContentInit(): void {
@@ -219,16 +225,16 @@ export class HeaderRow implements AfterContentInit {
     this._rowOutlet.viewContainer.clear();
 
     // then render each column
-    this.model.columns.forEach((column, index)=>{
+    this.model.columns.forEach((column, index) => {
       this.renderHeaderCell(column);
     });
   }
 
-  renderHeaderCell(column: GridColumn, index?: number){
+  renderHeaderCell(column: GridColumn, index?: number) {
     this._rowOutlet.viewContainer.createEmbeddedView(this._headerCellDef.templateRef, {$implicit: column}, index);
   }
 
-  clearCells(){
+  clearCells() {
     this._rowOutlet.viewContainer.clear();
   }
 
@@ -237,13 +243,13 @@ export class HeaderRow implements AfterContentInit {
    * @todo - can still do the TODO one for moving a column (look at material2 data table sort for an example
    *
    */
-  applyColumnChanges(changes: IterableChanges<GridColumn>){
-    if (!changes){
+  applyColumnChanges(changes: IterableChanges<GridColumn>) {
+    if (!changes) {
       return;
     }
 
     // remove
-    changes.forEachRemovedItem((record: IterableChangeRecord<GridColumn>)=>{
+    changes.forEachRemovedItem((record: IterableChangeRecord<GridColumn>) => {
       //console.log("removing existing cell", record);
       this._rowOutlet.viewContainer.remove(record.previousIndex);
 
@@ -254,9 +260,9 @@ export class HeaderRow implements AfterContentInit {
     });
 
     // add, insert
-    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>)=>{
-       //console.log("adding/inserting new cell for new column", record);
-       this.renderHeaderCell(record.item, record.currentIndex);
+    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>) => {
+      //console.log("adding/inserting new cell for new column", record);
+      this.renderHeaderCell(record.item, record.currentIndex);
 
       this.events$.emit({
         type: GridEventType.ColumnAdded,
@@ -306,14 +312,14 @@ export interface RowContext {
 @Directive({selector: '[dataRowDef]',})
 export class DataRowDef {
   constructor(public templateRef: TemplateRef<any>,
-              public viewContainer: ViewContainerRef){
+              public viewContainer: ViewContainerRef) {
   }
 }
 
 @Directive({selector: '[dataCellDef]',})
 export class DataCellDef {
   constructor(public templateRef: TemplateRef<any>,
-              public viewContainer: ViewContainerRef){
+              public viewContainer: ViewContainerRef) {
   }
 }
 
@@ -334,26 +340,26 @@ export class DataCell implements OnInit, AfterContentInit {
 
   column: GridColumn;
   row: RowContext;
-  @ViewChild(CellOutlet) _cellOutlet: CellOutlet;
+  @ViewChild(CellOutlet, {static: false}) _cellOutlet: CellOutlet;
 
   constructor(protected componentFactoryResolver: ComponentFactoryResolver,
               protected elementRef: ElementRef,
-              protected renderer: Renderer2){
+              protected renderer: Renderer2) {
   }
 
   ngOnInit(): void {
     this.renderer.addClass(this.elementRef.nativeElement, `am-data-cell-${toCssFriendly(this.column.config.key)}`);
     this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
 
-    if (this.column.styles.minWidth){
+    if (this.column.styles.minWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
 
-    } else if (this.column.model.styles.minColumnWidth){
+    } else if (this.column.model.styles.minColumnWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
     }
 
-    if (this.column.styles.dataCellStyleClasses){
-      this.column.styles.dataCellStyleClasses.forEach((cls, index)=>{
+    if (this.column.styles.dataCellStyleClasses) {
+      this.column.styles.dataCellStyleClasses.forEach((cls, index) => {
         this.renderer.addClass(this.elementRef.nativeElement, cls);
       });
     }
@@ -363,19 +369,19 @@ export class DataCell implements OnInit, AfterContentInit {
     this.renderCell();
   }
 
-  renderCell(){
+  renderCell() {
     /////////////console.log('DataCell: row:', this.row);
     /////////////console.log('DataCell: column:', this.column);
     //console.log(`rendering: ${this.column.config.key}`);
 
     this._cellOutlet.viewContainer.clear();
 
-    if (this.column.config.dataTemplate){
+    if (this.column.config.dataTemplate) {
       this._cellOutlet.viewContainer.createEmbeddedView(this.column.config.dataTemplate, {column: this.column, row: this.row});
 
     } else {
       let formatter: Type<GridDataFormatter> = this.column.config.formatter;
-      if (formatter){
+      if (formatter) {
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(formatter);
 
         let viewContainerRef = this._cellOutlet.viewContainer;
@@ -461,8 +467,8 @@ export interface DataCellStyleResolver {
     \                                                                   \
     \                                                                   \
     =====================================================================
-    -->    
-    
+    -->
+
     <div style="flex: 1 1 auto; cursor: pointer;" [ngClass]="rowClass()" (click)="rowClicked($event)">
       <div style="display: flex; flex: 1 1 auto;" [ngClass]="{'am-expanded-row': row.expanded && !rowClass()}">
         <div *ngIf="row.model.config.showExpander" class="am-header-expander-column">
@@ -489,47 +495,47 @@ export class DataRow implements AfterContentInit {
 
   @Output('events') events$ = new EventEmitter<GridEvent>();
 
-  @ViewChild(RowOutlet) _rowOutlet: RowOutlet;
-  @ViewChild(DataCellDef) _dataCellDef: DataCellDef;
-  @ViewChildren(DataCell) dataCells : QueryList<DataCell>;
-  @ViewChild(ExpanderOutlet) _expanderOutlet: ExpanderOutlet;
+  @ViewChild(RowOutlet, {static: false}) _rowOutlet: RowOutlet;
+  @ViewChild(DataCellDef, {static: false}) _dataCellDef: DataCellDef;
+  @ViewChildren(DataCell) dataCells: QueryList<DataCell>;
+  @ViewChild(ExpanderOutlet, {static: false}) _expanderOutlet: ExpanderOutlet;
 
   selected: boolean = false;
   row: RowContext;
   expanderIcon: string = EXPANDER_ICON_CLOSED;
 
-  constructor(protected _changeDetectorRef: ChangeDetectorRef){
+  constructor(protected _changeDetectorRef: ChangeDetectorRef) {
   }
 
-  rowClicked(event: any){
+  rowClicked(event: any) {
     this.events$.emit({
       type: GridEventType.RowClicked,
       data: this
     });
   }
 
-  selectRow(){
+  selectRow() {
     this.row.selected = true;
   }
 
-  deselectRow(){
+  deselectRow() {
     this.row.selected = false;
   }
 
-  isSelected() : boolean {
+  isSelected(): boolean {
     return this.row.selected;
   }
 
-  rowClass(){
-    if (this.row.model.styles.dataRowStyleResolver){
+  rowClass() {
+    if (this.row.model.styles.dataRowStyleResolver) {
       return this.row.model.styles.dataRowStyleResolver(this.row);
     } else {
-      return this.row.selected ? ["default-selected-row"] : null;
+      return this.row.selected ? ['default-selected-row'] : null;
     }
   }
 
-  cellClass(column: GridColumn){
-    if (column.styles.dataCellStyleResolver){
+  cellClass(column: GridColumn) {
+    if (column.styles.dataCellStyleResolver) {
       return column.styles.dataCellStyleResolver(this.row, column);
     } else {
       return null;
@@ -544,12 +550,12 @@ export class DataRow implements AfterContentInit {
     this._rowOutlet.viewContainer.clear();
 
     // then render each column
-    this.row.model.columns.forEach((column, index)=>{
+    this.row.model.columns.forEach((column, index) => {
       this.renderDataCell(column);
     });
   }
 
-  renderDataCell(column: GridColumn, index?: number){
+  renderDataCell(column: GridColumn, index?: number) {
     this._rowOutlet.viewContainer.createEmbeddedView(this._dataCellDef.templateRef, {$implicit: column, row: this.row}, index);
   }
 
@@ -558,19 +564,19 @@ export class DataRow implements AfterContentInit {
    * @todo - can still do the TODO one for moving a column (look at material2 data table sort for an example
    *
    */
-  applyColumnChanges(changes: IterableChanges<GridColumn>){
-    if (!changes){
+  applyColumnChanges(changes: IterableChanges<GridColumn>) {
+    if (!changes) {
       return;
     }
 
     // add, insert
-    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>)=>{
+    changes.forEachAddedItem((record: IterableChangeRecord<GridColumn>) => {
       /////////////console.log("adding/inserting new cell for new column", record);
-       this.renderDataCell(record.item, record.currentIndex);
+      this.renderDataCell(record.item, record.currentIndex);
     });
 
     // remove
-    changes.forEachRemovedItem((record: IterableChangeRecord<GridColumn>)=>{
+    changes.forEachRemovedItem((record: IterableChangeRecord<GridColumn>) => {
       /////////////console.log("removing existing cell", record);
       this._rowOutlet.viewContainer.remove(record.previousIndex);
     });
@@ -579,10 +585,10 @@ export class DataRow implements AfterContentInit {
     this._changeDetectorRef.markForCheck();
   }
 
-  toggleExpander(){
+  toggleExpander() {
     this._expanderOutlet.viewContainer.clear();
 
-    if (this.row.expanded){
+    if (this.row.expanded) {
       this.row.expanded = false;
       this.expanderIcon = EXPANDER_ICON_CLOSED;
 
@@ -590,7 +596,7 @@ export class DataRow implements AfterContentInit {
       this.row.expanded = true;
       this.expanderIcon = EXPANDER_ICON_OPEN;
 
-      if (this.row.model.config.expanderTemplate){
+      if (this.row.model.config.expanderTemplate) {
         this._expanderOutlet.viewContainer.createEmbeddedView(this.row.model.config.expanderTemplate, {row: this.row});
       }
     }
@@ -612,14 +618,14 @@ export class DataRow implements AfterContentInit {
       <ng-container dataRowOutlet></ng-container>
       <ng-container>
         <header-row *headerRowDef="let model" [model]="model" (events)="emit($event)"></header-row>
-        <data-row *dataRowDef="let row" [row]="row" (events)="emit($event)"></data-row>    
-      </ng-container>  
+        <data-row *dataRowDef="let row" [row]="row" (events)="emit($event)"></data-row>
+      </ng-container>
     </div>
   `,
   encapsulation: ViewEncapsulation.None,
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer  {
+export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, AfterContentInit, AfterContentChecked, OnChanges, CollectionViewer {
   @Output('events') events$ = new EventEmitter<GridEvent>();
   data: any[] = [];
   @Input() model: GridModel;
@@ -639,15 +645,15 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     }
   }
 
-  @ViewChild(HeaderRowOutlet) _headerRowOutlet: HeaderRowOutlet;
-  @ViewChild(HeaderRowDef) _headerRowDef: HeaderRowDef;
+  @ViewChild(HeaderRowOutlet, {static: false}) _headerRowOutlet: HeaderRowOutlet;
+  @ViewChild(HeaderRowDef, {static: false}) _headerRowDef: HeaderRowDef;
 
-  @ViewChild('headerRow') headerRowTemplate: TemplateRef<any>;
-  @ViewChild(HeaderRow) headerRow : HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
+  @ViewChild('headerRow', {static: false}) headerRowTemplate: TemplateRef<any>;
+  @ViewChild(HeaderRow, {static: false}) headerRow: HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
 
-  @ViewChild(DataRowOutlet) _dataRowOutlet: DataRowOutlet;
-  @ViewChild(DataRowDef) _dataRowDef: DataRowDef;
-  @ViewChildren(DataRow) dataRows : QueryList<DataRow>;   // wil only be visible on the next changes (after everything has rendered)
+  @ViewChild(DataRowOutlet, {static: false}) _dataRowOutlet: DataRowOutlet;
+  @ViewChild(DataRowDef, {static: false}) _dataRowDef: DataRowDef;
+  @ViewChildren(DataRow) dataRows: QueryList<DataRow>;   // wil only be visible on the next changes (after everything has rendered)
 
   // keep track of the changes on the model's columns
   private columnsDiffer: IterableDiffer<GridColumn>;
@@ -657,33 +663,33 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
 
   modelSubscription: Subscription;
 
-  viewChange = new BehaviorSubject<{start: number, end: number}>({start: 0, end: Number.MAX_VALUE});
+  viewChange = new BehaviorSubject<{ start: number, end: number }>({start: 0, end: Number.MAX_VALUE});
 
   gridDefaults: GridDefaults = new GridDefaults();
 
   constructor(protected _differs: IterableDiffers,
-              protected _changeDetectorRef: ChangeDetectorRef){
+              protected _changeDetectorRef: ChangeDetectorRef) {
 
   }
 
-  toggleRowExpander(index: number){
+  toggleRowExpander(index: number) {
     try {
       this.dataRows.toArray()[index].toggleExpander();
-    } catch (error){
+    } catch (error) {
       console.log(error);
     }
   }
 
-  emit(event: GridEvent){
-    if (event.type == GridEventType.RowClicked){
+  emit(event: GridEvent) {
+    if (event.type == GridEventType.RowClicked) {
       this.events$.emit(event);
 
       let clickedDataRow = event.data as DataRow;
       let isCurrentselected = false;
 
-      this.dataRows.forEach((dataRow: DataRow)=>{
-        if (dataRow.isSelected()){
-          if (dataRow == clickedDataRow){
+      this.dataRows.forEach((dataRow: DataRow) => {
+        if (dataRow.isSelected()) {
+          if (dataRow == clickedDataRow) {
             isCurrentselected = true;
           }
 
@@ -698,7 +704,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
         }
       });
 
-      if (!isCurrentselected){
+      if (!isCurrentselected) {
         clickedDataRow.selectRow();
         this.events$.emit({
           type: GridEventType.RowSelected,
@@ -767,13 +773,13 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     }
 
     // clean up the subscription to the grid model when we are destroyed
-    if (this.modelSubscription){
+    if (this.modelSubscription) {
       this.modelSubscription.unsubscribe();
       this.modelSubscription = null;
     }
   }
 
-  setupHeader(){
+  setupHeader() {
     // lets clear the row outlet container to make sure everything is squeeky clean
     this._headerRowOutlet.viewContainer.clear();
 
@@ -781,7 +787,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this._headerRowOutlet.viewContainer.createEmbeddedView(this._headerRowDef.templateRef, {$implicit: this.model});
   }
 
-  gridModelChanged(event?: GridModelEvent){
+  gridModelChanged(event?: GridModelEvent) {
 
     // always apply defaults (default data and header formatter if none specified)
     this.gridDefaults.applyDefaults(this.model.columns);
@@ -800,7 +806,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     // tell header row to look at the changes to insert/update/remove where required
     this.headerRow.applyColumnChanges(changes);
 
-    this.dataRows.forEach((dataRow, index)=>{
+    this.dataRows.forEach((dataRow, index) => {
       dataRow.applyColumnChanges(changes);
     });
 
@@ -808,14 +814,14 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this._changeDetectorRef.markForCheck();
   }
 
-  dataSourceDataChanged(){
+  dataSourceDataChanged() {
     const changes = this.dataDiffer.diff(this.data);
     if (!changes) {
       return;
     }
 
     // remove
-    changes.forEachRemovedItem((record: IterableChangeRecord<T>)=>{
+    changes.forEachRemovedItem((record: IterableChangeRecord<T>) => {
       //console.log("removing existing row", record);
       this._dataRowOutlet.viewContainer.remove(record.previousIndex);
 
@@ -826,7 +832,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     });
 
     // add, insert
-    changes.forEachAddedItem((record: IterableChangeRecord<T>)=>{
+    changes.forEachAddedItem((record: IterableChangeRecord<T>) => {
       //console.log("adding/inserting new row", record);
       let rowContext: RowContext = {
         data: record.item,
@@ -849,9 +855,9 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     });
 
     // we need to wait one tick for the rows to be rendered before trying to toggle them
-    setTimeout(()=>{
+    setTimeout(() => {
       // we just want to do this once.  We can always call the toggleExpander manually but you would have to do it after the data has been loaded
-      if (this.model.config.expandRowIndex > -1){
+      if (this.model.config.expandRowIndex > -1) {
         this.toggleRowExpander(this.model.config.expandRowIndex);
         this.model.config.expandRowIndex = -1;
       }
@@ -877,13 +883,13 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     this._dataSource = dataSource;
   }
 
-  private observeModel(){
-    this.modelSubscription = this.model._changes.subscribe((event: GridModelEvent)=>{
+  private observeModel() {
+    this.modelSubscription = this.model._changes.subscribe((event: GridModelEvent) => {
       this.gridModelChanged(event);
     });
   }
 
-  private observeDataSource(){
+  private observeDataSource() {
     if (this.dataSource && !this.dataSubscription) {
       this.dataSubscription = takeUntil.call(this.dataSource.connect(this), this.onDestroy).subscribe(data => {
         this.data = data;
@@ -947,10 +953,10 @@ export class GridModel {
   config: GridModelConfig;
   styles: GridModelStyles;
   columns: GridColumn[] = [];
-    _changes = new Subject<GridModelEvent>();
+  _changes = new Subject<GridModelEvent>();
   grid: GridComponent<any>;
 
-  constructor(config: GridModelConfig, styles: GridModelStyles = {}){
+  constructor(config: GridModelConfig, styles: GridModelStyles = {}) {
     this.config = {
       selection: !_.isNil(config.selection) ? config.selection : false,
       showExpander: !_.isNil(config.showExpander) ? config.showExpander : false,
@@ -960,7 +966,7 @@ export class GridModel {
     };
 
     this.styles = {
-      containerClasses: !_.isNil(styles.containerClasses) ?  styles.containerClasses : [],
+      containerClasses: !_.isNil(styles.containerClasses) ? styles.containerClasses : [],
       gridClasses: !_.isNil(styles.containerClasses) ? styles.containerClasses : [],
       scrollX: !_.isNil(styles.scrollX) ? styles.scrollX : false,
       minColumnWidth: !_.isNil(styles.minColumnWidth) ? styles.minColumnWidth : null,
@@ -968,60 +974,61 @@ export class GridModel {
     };
   }
 
-  toggleExpander(index: number){
+  toggleExpander(index: number) {
     this.grid.toggleRowExpander(index);
   }
 
-  addColumn(column: GridColumn){
+  addColumn(column: GridColumn) {
     column.model = this;
     this.columns.push(column);
     this.notifyChanges(GridModelEventType.ADD);
   }
 
-  getColumnByKey(key: string) : GridColumn {
-    return _.find(this.columns, { config: {key: key}});
+  getColumnByKey(key: string): GridColumn {
+    return _.find(this.columns, {config: {key: key}});
   }
 
-  insertColumn(column: GridColumn, index: number){
+  insertColumn(column: GridColumn, index: number) {
     //column.model = this;
     this.columns.splice(index, 0, column);
     this.notifyChanges(GridModelEventType.ADD);
   }
 
-  removeColumn(column: GridColumn){
+  removeColumn(column: GridColumn) {
     this.columns = _.without(this.columns, column);
     this.notifyChanges(GridModelEventType.REMOVE);
   }
 
-  removeColumnByIndex(index: number){
+  removeColumnByIndex(index: number) {
     this.columns.splice(index, 1);
     this.notifyChanges(GridModelEventType.REMOVE);
   }
 
-  removeColumnsByKey(key: string){
-    _.remove(this.columns, (column)=>{
+  removeColumnsByKey(key: string) {
+    _.remove(this.columns, (column) => {
       return column.config.key == key;
     });
     this.notifyChanges(GridModelEventType.REMOVE);
   }
 
-  updateStyles(){
+  updateStyles() {
     this.notifyChanges(GridModelEventType.UPDATE, null);
   }
 
-  updateColumn(column: GridColumn){
+  updateColumn(column: GridColumn) {
     let index = this.columns.indexOf(column);
-    if (index > -1){
+    if (index > -1) {
       this.columns[index] = column;
     }
     this.notifyChanges(GridModelEventType.UPDATE, column);
   }
-  removeAll(){
+
+  removeAll() {
     this.columns = [];
     this.notifyChanges(GridModelEventType.REMOVE);
   }
 
-  notifyChanges(type: GridModelEventType, column?: GridColumn){
+  notifyChanges(type: GridModelEventType, column?: GridColumn) {
     this._changes.next({
       type: type,
       column: column,
@@ -1044,7 +1051,7 @@ export interface GridColumnConfig {
   headingTemplate?: TemplateRef<any>;
   dataTemplate?: TemplateRef<any>;
 
-  options? : any;
+  options?: any;
 }
 
 export interface GridColumnStyle {
@@ -1064,7 +1071,7 @@ export class GridColumn {
   options: any;
   refresh: boolean = false;
 
-  constructor(config: GridColumnConfig, styles: GridColumnStyle = {}, options: any = {}){
+  constructor(config: GridColumnConfig, styles: GridColumnStyle = {}, options: any = {}) {
     this.config = {
       key: config.key,
       type: config.type || 'text',
@@ -1088,11 +1095,11 @@ export class GridColumn {
       dataCellStyleResolver: styles.dataCellStyleResolver || null
     };
 
-    if (!this.config.heading && !this.config.noHeading){
+    if (!this.config.heading && !this.config.noHeading) {
       let tempHeading = this.config.key;
       this.config.heading = '';
 
-      tempHeading.split('.').forEach((name, index)=>{
+      tempHeading.split('.').forEach((name, index) => {
         this.config.heading += _.startCase(name) + ' ';
       });
     }
@@ -1113,7 +1120,7 @@ export class GridPropertyFormatter implements GridDataFormatter {
   @Input() column: GridColumn;
   @Input() row: RowContext;
 
-  getValue(){
+  getValue() {
     return _.get(this.row.data, this.column.config.key);
     /*
     try {
@@ -1132,10 +1139,10 @@ export class GridDateFormatter extends GridPropertyFormatter {
   @Input() column: GridColumn;
   @Input() row: RowContext;
 
-  constructor(@Optional() @Inject(AM_GRID_DATE_FORMAT) public gridDateFormat: GridDateFormat){
+  constructor(@Optional() @Inject(AM_GRID_DATE_FORMAT) public gridDateFormat: GridDateFormat) {
     super();
     //console.log("=======================***> ", this.gridDateFormat);
-    if (!gridDateFormat){
+    if (!gridDateFormat) {
       //console.log("DHO!!@ ", this.gridDateFormat);
       this.gridDateFormat = {
         format: 'fullDate'
@@ -1143,7 +1150,7 @@ export class GridDateFormatter extends GridPropertyFormatter {
     }
   }
 
-  getFormat(){
+  getFormat() {
     return this.column.options.dateFormat || this.gridDateFormat.format;
   }
 }
@@ -1167,41 +1174,39 @@ export interface GridExpanderFormatter {
 
 export class GridDefaults {
 
-  columns : Map<string, GridColumn> = new Map();
+  columns: Map<string, GridColumn> = new Map();
 
-  constructor(){
+  constructor() {
     let dateCol = new GridColumn({
       type: 'date',
       key: 'date',
       formatter: GridDateFormatter
-    },{
-
-    },{
+    }, {}, {
       //dateFormat: 'fullDate'
     });
 
-    let textCol = new GridColumn({type: 'text', key: 'text', formatter: GridPropertyFormatter });
+    let textCol = new GridColumn({type: 'text', key: 'text', formatter: GridPropertyFormatter});
 
     this.setDefaultColumn(dateCol.config.type, dateCol);
     this.setDefaultColumn(textCol.config.type, textCol);
   }
 
-  setDefaultColumn(type: string, column: GridColumn){
+  setDefaultColumn(type: string, column: GridColumn) {
     this.columns.set(type, column);
   }
 
-  getDefaultColumn(type: string) : GridColumn {
+  getDefaultColumn(type: string): GridColumn {
     return this.columns.get(type);
   }
 
-  applyDefaults(columns: GridColumn[]){
-    if (!columns || columns.length == 0){
+  applyDefaults(columns: GridColumn[]) {
+    if (!columns || columns.length == 0) {
       return;
     }
 
-    columns.forEach((column, index)=>{
+    columns.forEach((column, index) => {
       let defaultColumn = this.getDefaultColumn(column.config.type);
-      if (defaultColumn){
+      if (defaultColumn) {
         _.defaultsDeep(column, defaultColumn);
         //console.log(column);
       }
