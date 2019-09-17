@@ -129,7 +129,7 @@ export class HeaderCellDef {
 export class HeaderCell implements OnInit, OnDestroy, AfterContentInit, OnChanges {
 
   column: GridColumn;
-  @ViewChild(CellOutlet, {static: false}) _cellOutlet: CellOutlet;
+  @ViewChild(CellOutlet, {static: true}) _cellOutlet: CellOutlet;
 
   constructor(protected componentFactoryResolver: ComponentFactoryResolver,
               protected elementRef: ElementRef,
@@ -340,7 +340,7 @@ export class DataCell implements OnInit, AfterContentInit {
 
   column: GridColumn;
   row: RowContext;
-  @ViewChild(CellOutlet, {static: false}) _cellOutlet: CellOutlet;
+  @ViewChild(CellOutlet, {static: true}) _cellOutlet: CellOutlet;
 
   constructor(protected componentFactoryResolver: ComponentFactoryResolver,
               protected elementRef: ElementRef,
@@ -495,10 +495,10 @@ export class DataRow implements AfterContentInit {
 
   @Output('events') events$ = new EventEmitter<GridEvent>();
 
-  @ViewChild(RowOutlet, {static: false}) _rowOutlet: RowOutlet;
-  @ViewChild(DataCellDef, {static: false}) _dataCellDef: DataCellDef;
+  @ViewChild(RowOutlet, {static: true}) _rowOutlet: RowOutlet;
+  @ViewChild(DataCellDef, {static: true}) _dataCellDef: DataCellDef;
   @ViewChildren(DataCell) dataCells: QueryList<DataCell>;
-  @ViewChild(ExpanderOutlet, {static: false}) _expanderOutlet: ExpanderOutlet;
+  @ViewChild(ExpanderOutlet, {static: true}) _expanderOutlet: ExpanderOutlet;
 
   selected: boolean = false;
   row: RowContext;
@@ -645,14 +645,14 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
     }
   }
 
-  @ViewChild(HeaderRowOutlet, {static: false}) _headerRowOutlet: HeaderRowOutlet;
-  @ViewChild(HeaderRowDef, {static: false}) _headerRowDef: HeaderRowDef;
+  @ViewChild(HeaderRowOutlet, {static: true}) _headerRowOutlet: HeaderRowOutlet;
+  @ViewChild(HeaderRowDef, {static: true}) _headerRowDef: HeaderRowDef;
 
-  @ViewChild('headerRow', {static: false}) headerRowTemplate: TemplateRef<any>;
-  @ViewChild(HeaderRow, {static: false}) headerRow: HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
+  @ViewChild('headerRow', {static: true}) headerRowTemplate: TemplateRef<any>;
+  @ViewChild(HeaderRow, {static: true}) headerRow: HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
 
-  @ViewChild(DataRowOutlet, {static: false}) _dataRowOutlet: DataRowOutlet;
-  @ViewChild(DataRowDef, {static: false}) _dataRowDef: DataRowDef;
+  @ViewChild(DataRowOutlet, {static: true}) _dataRowOutlet: DataRowOutlet;
+  @ViewChild(DataRowDef, {static: true}) _dataRowDef: DataRowDef;
   @ViewChildren(DataRow) dataRows: QueryList<DataRow>;   // wil only be visible on the next changes (after everything has rendered)
 
   // keep track of the changes on the model's columns
