@@ -140,11 +140,13 @@ export class HeaderCell implements OnInit, OnDestroy, AfterContentInit, OnChange
     this.renderer.addClass(this.elementRef.nativeElement, `am-header-cell-${toCssFriendly(this.column.config.key)}`);
     this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
 
-    if (this.column.styles.minWidth) {
+    if (this.column && this.column.styles.minWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
 
-    } else if (this.column.model.styles.minColumnWidth) {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+    } else if (this.column && this.column.model) {
+      if (this.column.model.styles.minColumnWidth) {
+        this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+      }
     }
 
     if (this.column.styles.headerCellStyleClasses) {
@@ -351,11 +353,13 @@ export class DataCell implements OnInit, AfterContentInit {
     this.renderer.addClass(this.elementRef.nativeElement, `am-data-cell-${toCssFriendly(this.column.config.key)}`);
     this.renderer.setStyle(this.elementRef.nativeElement, 'flex', this.column.styles.flex || 1);
 
-    if (this.column.styles.minWidth) {
+    if (this.column && this.column.styles.minWidth) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.styles.minWidth);
 
-    } else if (this.column.model.styles.minColumnWidth) {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+    } else if (this.column && this.column.model) {
+      if (this.column.model.styles.minColumnWidth) {
+        this.renderer.setStyle(this.elementRef.nativeElement, 'min-width', this.column.model.styles.minColumnWidth);
+      }
     }
 
     if (this.column.styles.dataCellStyleClasses) {
@@ -649,7 +653,7 @@ export class GridComponent<T> implements OnInit, AfterViewInit, OnDestroy, After
   @ViewChild(HeaderRowDef, {static: true}) _headerRowDef: HeaderRowDef;
 
   @ViewChild('headerRow', {static: true}) headerRowTemplate: TemplateRef<any>;
-  @ViewChild(HeaderRow, {static: true}) headerRow: HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
+  @ViewChild(HeaderRow, {static: false}) headerRow: HeaderRow;   // wil only be visible on the next changes (after everything has rendered)
 
   @ViewChild(DataRowOutlet, {static: true}) _dataRowOutlet: DataRowOutlet;
   @ViewChild(DataRowDef, {static: true}) _dataRowDef: DataRowDef;
